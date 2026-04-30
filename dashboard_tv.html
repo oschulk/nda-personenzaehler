@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6fafc">
+  <meta name="color-scheme" content="light">
+  <title>Aurubis Lünen – TV Dashboard</title>
+  <style>
+    :root{
+      --bg:#f6fafc;
+      --card:#ffffff;
+      --line:#d8e5ee;
+      --text:#112433;
+      --muted:#70808c;
+      --aurubis:#008fc7;
+      --aurubis-dark:#006b9a;
+      --male:#1976d2;
+      --female:#c83f8d;
+      --good:#149768;
+      --bad:#d64545;
+      --shadow:0 16px 38px rgba(16,35,51,.08);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,#ffffff 0%, var(--bg) 100%);
+    }
+    button{font:inherit}
+    .app{
+      min-height:100%;
+      max-width:1600px;
+      margin:0 auto;
+      padding:18px;
+      display:grid;
+      gap:18px;
+      grid-template-rows:auto 1fr auto;
+    }
+    .header{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:18px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .logo{
+      width:56px;height:56px;border-radius:16px;
+      background:linear-gradient(135deg,var(--aurubis),#49c9ec);
+      color:#fff;display:grid;place-items:center;
+      font-weight:1000;font-size:28px;flex:0 0 auto;
+    }
+    h1{margin:0;font-size:clamp(1.6rem,2.4vw,2.4rem);letter-spacing:-.04em;line-height:1.04}
+    .sub{margin-top:5px;color:var(--muted);font-size:1rem}
+    .headRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      min-height:46px;padding:10px 14px;border-radius:999px;
+      background:#fbfdfe;border:1px solid var(--line);
+      font-weight:900;font-size:.95rem;white-space:nowrap;
+    }
+    .dot{width:11px;height:11px;border-radius:999px;background:#f2a900}
+    .dot.online{background:var(--good)}
+    .dot.offline{background:var(--bad)}
+    .iconBtn{
+      width:46px;height:46px;border-radius:14px;border:1px solid var(--line);
+      background:#fff;color:var(--text);cursor:pointer;font-weight:1000
+    }
+
+    .main{
+      display:grid;
+      grid-template-columns:1.3fr .7fr;
+      gap:18px;
+      min-height:0;
+    }
+    .leftCol,.rightCol{display:grid;gap:18px;min-height:0}
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      min-width:0;
+    }
+    .hero{
+      padding:28px 32px;
+      display:grid;
+      align-items:center;
+      min-height:360px;
+      background:linear-gradient(135deg, rgba(0,143,199,.08), rgba(73,201,236,.04) 45%, #fff 100%);
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;border:1px solid #d4ebf5;
+      background:#f5fbfe;color:var(--aurubis);font-size:.82rem;font-weight:1000;
+      text-transform:uppercase;letter-spacing:.06em;
+    }
+    .heroLabel{
+      margin-top:18px;color:var(--muted);font-size:1rem;font-weight:900;
+      text-transform:uppercase;letter-spacing:.06em;
+    }
+    .heroNumber{
+      margin-top:10px;
+      font-size:clamp(8rem,19vw,15rem);
+      line-height:.83;
+      letter-spacing:-.09em;
+      font-weight:1000;
+      color:var(--aurubis-dark);
+    }
+    .heroMeta{
+      margin-top:18px;
+      display:flex;flex-wrap:wrap;gap:12px;
+    }
+    .miniPill{
+      display:inline-flex;align-items:center;gap:8px;
+      min-height:44px;padding:9px 13px;border-radius:999px;
+      border:1px solid var(--line);background:#fff;font-weight:900;font-size:.96rem;
+    }
+    .swatch{width:12px;height:12px;border-radius:999px;display:inline-block}
+
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{
+      padding:22px;
+      min-height:148px;
+      display:grid;
+      align-content:start;
+    }
+    .label{color:var(--muted);font-size:.95rem;font-weight:900}
+    .value{
+      margin-top:12px;font-size:clamp(2.8rem,5vw,4.2rem);line-height:.95;
+      letter-spacing:-.06em;font-weight:1000;
+    }
+    .desc{margin-top:8px;color:var(--muted);font-size:.94rem}
+
+    .feedPanel{padding:22px;display:grid;gap:16px;min-height:0}
+    .panelTitle{font-size:1.16rem;font-weight:1000;letter-spacing:-.02em}
+    .panelText{color:var(--muted);font-size:.96rem}
+    .feed{display:grid;gap:8px;overflow:auto;min-height:0}
+    .feedItem{
+      display:grid;grid-template-columns:1fr auto;gap:12px;
+      padding:14px 0;border-bottom:1px solid var(--line);
+      font-size:1rem;
+    }
+    .feedItem:last-child{border-bottom:0}
+    .feedItem b{font-size:1.02rem;font-weight:1000}
+    .feedItem small{display:block;margin-top:5px;color:var(--muted);font-size:.88rem}
+    .feedItem time{color:var(--muted);font-weight:900;white-space:nowrap}
+    .empty{padding:12px 0;color:var(--muted);font-weight:800}
+
+    .footer{
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      color:var(--muted);font-size:.94rem;padding:0 4px 4px;
+    }
+
+    @media (max-width:1200px){
+      .main{grid-template-columns:1fr}
+      .hero{min-height:320px}
+    }
+    @media (max-width:760px){
+      .app{padding:14px}
+      .header{flex-direction:column;align-items:flex-start}
+      .headRight{justify-content:flex-start}
+      .grid3{grid-template-columns:1fr}
+      .heroNumber{font-size:6.5rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">A</div>
+        <div>
+          <h1>Aurubis Lünen – Besucher Dashboard</h1>
+          <div class="sub">Nacht der Ausbildung · TV / Monitor Ansicht</div>
+        </div>
+      </div>
+      <div class="headRight">
+        <div class="pill"><span class="dot" id="statusDot"></span><span id="statusText">Verbinde …</span></div>
+        <div class="pill" id="updatedInfo">Aktualisiert: –</div>
+        <button class="iconBtn" id="fullscreenBtn" type="button" title="Vollbild">⛶</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="leftCol">
+        <section class="panel hero">
+          <div>
+            <div class="eyebrow">Live-Anzeige</div>
+            <div class="heroLabel">Aktuell im Bereich</div>
+            <div class="heroNumber" id="currentTotal">0</div>
+            <div class="heroMeta">
+              <div class="miniPill"><span class="swatch" style="background:var(--male)"></span>Männlich: <span id="maleCurrentChip">0</span></div>
+              <div class="miniPill"><span class="swatch" style="background:var(--female)"></span>Weiblich: <span id="femaleCurrentChip">0</span></div>
+              <div class="miniPill"><span class="swatch" style="background:var(--aurubis)"></span>Peak: <span id="peakChip">0</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid3">
+          <article class="panel card">
+            <div class="label">Gesamt rein</div>
+            <div class="value" id="totalInValue">0</div>
+            <div class="desc">Alle Eintritte</div>
+          </article>
+          <article class="panel card">
+            <div class="label">Gesamt raus</div>
+            <div class="value" id="totalOutValue">0</div>
+            <div class="desc">Alle Austritte</div>
+          </article>
+          <article class="panel card">
+            <div class="label">Aktionen gesamt</div>
+            <div class="value" id="eventCountValue">0</div>
+            <div class="desc">Alle Klicks</div>
+          </article>
+        </section>
+      </div>
+
+      <aside class="rightCol">
+        <section class="grid3" style="grid-template-columns:1fr;">
+          <article class="panel card">
+            <div class="label">Männlich aktuell</div>
+            <div class="value" id="maleCurrent">0</div>
+            <div class="desc">Momentan im Bereich</div>
+          </article>
+          <article class="panel card">
+            <div class="label">Weiblich aktuell</div>
+            <div class="value" id="femaleCurrent">0</div>
+            <div class="desc">Momentan im Bereich</div>
+          </article>
+          <article class="panel card">
+            <div class="label">Peak</div>
+            <div class="value" id="peakValue">0</div>
+            <div class="desc">Höchster gleichzeitiger Stand</div>
+          </article>
+        </section>
+
+        <section class="panel feedPanel">
+          <div>
+            <div class="panelTitle">Letzte Aktionen</div>
+            <div class="panelText">Nur Anzeige – ohne Bedienung.</div>
+          </div>
+          <div class="feed" id="activityFeed"></div>
+        </section>
+      </aside>
+    </main>
+
+    <div class="footer">
+      <span id="syncInfo">Firebase: verbunden</span>
+      <span>Dashboard-Modus · Nur Anzeige</span>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getDatabase, ref, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCmArIvvc4ikmtJS3POHL0Wq0l5v9kJ1SY",
+      authDomain: "nda-personenzaehler.firebaseapp.com",
+      databaseURL: "https://nda-personenzaehler-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "nda-personenzaehler",
+      storageBucket: "nda-personenzaehler.firebasestorage.app",
+      messagingSenderId: "1056682674334",
+      appId: "1:1056682674334:web:dc270c8bb1dba8ce51538f",
+      measurementId: "G-HK25LZR82X"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const PATH = "nda";
+    const counterRef = ref(db, `${PATH}/counter`);
+    const feedRef = ref(db, `${PATH}/feed`);
+    const connectedRef = ref(db, ".info/connected");
+
+    const DEFAULT_COUNTER = {
+      maleIn:0,
+      maleOut:0,
+      femaleIn:0,
+      femaleOut:0,
+      peak:0,
+      eventCount:0,
+      updatedAt:Date.now(),
+      lastAction:"–"
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const els = {
+      statusDot: $("statusDot"),
+      statusText: $("statusText"),
+      updatedInfo: $("updatedInfo"),
+      syncInfo: $("syncInfo"),
+      currentTotal: $("currentTotal"),
+      maleCurrentChip: $("maleCurrentChip"),
+      femaleCurrentChip: $("femaleCurrentChip"),
+      peakChip: $("peakChip"),
+      totalInValue: $("totalInValue"),
+      totalOutValue: $("totalOutValue"),
+      eventCountValue: $("eventCountValue"),
+      maleCurrent: $("maleCurrent"),
+      femaleCurrent: $("femaleCurrent"),
+      peakValue: $("peakValue"),
+      activityFeed: $("activityFeed")
+    };
+
+    let online = false;
+
+    function n(v){
+      const num = Number(v);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function cleanCounter(data){
+      return {
+        maleIn:n(data?.maleIn),
+        maleOut:n(data?.maleOut),
+        femaleIn:n(data?.femaleIn),
+        femaleOut:n(data?.femaleOut),
+        peak:n(data?.peak),
+        eventCount:n(data?.eventCount),
+        updatedAt:data?.updatedAt || Date.now(),
+        lastAction:data?.lastAction || "–"
+      };
+    }
+
+    function compute(data){
+      const maleCurrent = Math.max(0, n(data.maleIn) - n(data.maleOut));
+      const femaleCurrent = Math.max(0, n(data.femaleIn) - n(data.femaleOut));
+      const totalIn = n(data.maleIn) + n(data.femaleIn);
+      const totalOut = n(data.maleOut) + n(data.femaleOut);
+      const totalCurrent = maleCurrent + femaleCurrent;
+      return { maleCurrent, femaleCurrent, totalIn, totalOut, totalCurrent };
+    }
+
+    function formatTime(value){
+      if(!value) return "–";
+      return new Date(value).toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+    }
+
+    function escapeHTML(value){
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function renderStatus(){
+      els.statusDot.className = `dot ${online ? "online" : "offline"}`;
+      els.statusText.textContent = online ? "Live verbunden" : "Offline";
+      els.syncInfo.textContent = online ? "Firebase: verbunden" : "Firebase: getrennt";
+    }
+
+    function renderCounter(raw){
+      const data = cleanCounter(raw || DEFAULT_COUNTER);
+      const c = compute(data);
+      els.currentTotal.textContent = c.totalCurrent;
+      els.maleCurrentChip.textContent = c.maleCurrent;
+      els.femaleCurrentChip.textContent = c.femaleCurrent;
+      els.peakChip.textContent = data.peak;
+      els.totalInValue.textContent = c.totalIn;
+      els.totalOutValue.textContent = c.totalOut;
+      els.eventCountValue.textContent = data.eventCount;
+      els.maleCurrent.textContent = c.maleCurrent;
+      els.femaleCurrent.textContent = c.femaleCurrent;
+      els.peakValue.textContent = data.peak;
+      els.updatedInfo.textContent = `Aktualisiert: ${formatTime(data.updatedAt)}`;
+    }
+
+    function renderFeed(items){
+      els.activityFeed.innerHTML = "";
+      if(!items.length){
+        els.activityFeed.innerHTML = '<div class="empty">Noch keine Aktionen vorhanden.</div>';
+        return;
+      }
+      items.slice().reverse().forEach(item => {
+        const row = document.createElement("div");
+        row.className = "feedItem";
+        row.innerHTML = `
+          <div>
+            <b>${escapeHTML(item.title || "Aktion")}</b>
+            <small>${escapeHTML(item.deviceId || "Live")}</small>
+          </div>
+          <time>${formatTime(item.at)}</time>
+        `;
+        els.activityFeed.appendChild(row);
+      });
+    }
+
+    document.getElementById("fullscreenBtn").addEventListener("click", async () => {
+      try{
+        if(document.fullscreenElement) await document.exitFullscreen();
+        else await document.documentElement.requestFullscreen();
+      }catch{}
+    });
+
+    onValue(connectedRef, (snap) => {
+      online = snap.val() === true;
+      renderStatus();
+    });
+
+    onValue(counterRef, (snap) => {
+      renderCounter(snap.exists() ? snap.val() : DEFAULT_COUNTER);
+    });
+
+    onValue(query(feedRef, limitToLast(8)), (snap) => {
+      const items = [];
+      snap.forEach(child => items.push(child.val()));
+      items.sort((a,b) => n(a.at) - n(b.at));
+      renderFeed(items);
+    });
+
+    renderCounter(DEFAULT_COUNTER);
+    renderStatus();
+  </script>
+</body>
+</html>
