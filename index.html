@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <title>Aurubis Lünen – Personenzähler</title>
+  <style>
+    :root{
+      --bg:#f5f8fb;
+      --card:#ffffff;
+      --text:#102333;
+      --muted:#6b7a86;
+      --line:#dbe6ee;
+      --aurubis:#008fc7;
+      --aurubis-dark:#006b9a;
+      --male:#1976d2;
+      --female:#c83f8d;
+      --good:#0f9f6e;
+      --warn:#f2a900;
+      --danger:#d64545;
+      --shadow:0 14px 34px rgba(16,35,51,.08);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,#ffffff 0%,var(--bg) 100%);
+    }
+    button{font:inherit}
+
+    .app{
+      max-width:1180px;
+      margin:0 auto;
+      padding:22px;
+      min-height:100%;
+      display:grid;
+      gap:18px;
+      grid-template-rows:auto 1fr auto;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 20px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .logo{
+      width:48px;height:48px;border-radius:16px;
+      background:linear-gradient(135deg,var(--aurubis),#42c7ec);
+      display:grid;place-items:center;color:white;font-weight:900;font-size:22px;
+      flex:0 0 auto;
+    }
+    h1{margin:0;font-size:clamp(1.35rem,2.4vw,2.1rem);letter-spacing:-.03em;line-height:1.05}
+    .small{color:var(--muted);font-size:.95rem;margin-top:4px}
+
+    .statusBar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      min-height:40px;padding:8px 12px;border-radius:999px;
+      background:#f7fafc;border:1px solid var(--line);
+      color:var(--text);font-weight:800;font-size:.9rem;white-space:nowrap;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--warn)}
+    .dot.online{background:var(--good)} .dot.offline{background:var(--danger)} .dot.pending{background:var(--warn)}
+    .iconBtn{
+      width:42px;height:42px;border-radius:14px;border:1px solid var(--line);
+      background:white;color:var(--text);cursor:pointer;display:grid;place-items:center;
+    }
+    .iconBtn:active,.btn:active,.miniBtn:active{transform:scale(.985)}
+
+    main{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .counter{
+      padding:28px;
+      display:grid;
+      gap:22px;
+    }
+    .totalBox{
+      text-align:center;
+      padding:22px 18px 12px;
+    }
+    .label{color:var(--muted);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem}
+    .total{
+      margin-top:8px;
+      color:var(--aurubis-dark);
+      font-size:clamp(6rem,16vw,12rem);
+      line-height:.85;
+      font-weight:1000;
+      letter-spacing:-.08em;
+    }
+
+    .quickStats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .stat{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:#fbfdfe;
+    }
+    .statName{color:var(--muted);font-size:.86rem;font-weight:800}
+    .statValue{margin-top:6px;font-size:2rem;line-height:1;font-weight:1000;letter-spacing:-.04em}
+
+    .buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .btn{
+      min-height:150px;
+      border:0;
+      border-radius:22px;
+      color:white;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px;
+      box-shadow:0 12px 26px rgba(16,35,51,.13);
+      transition:transform .1s ease,filter .1s ease;
+    }
+    .btn:hover{filter:saturate(1.05)}
+    .btn strong{display:block;font-size:1.45rem;letter-spacing:-.03em;line-height:1.05}
+    .btn span{font-size:3rem;font-weight:1000;line-height:1}
+    .male{background:linear-gradient(135deg,#2894e8,var(--male))}
+    .female{background:linear-gradient(135deg,#dd6eaa,var(--female))}
+    .out{opacity:.82}
+
+    aside{display:grid;gap:18px}
+    .side{padding:18px;display:grid;gap:14px}
+    .sideGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .sideStat{padding:14px;border:1px solid var(--line);border-radius:16px;background:#fbfdfe}
+    .sideStat b{display:block;font-size:1.75rem;line-height:1;margin-top:5px}
+
+    .actions{display:grid;gap:10px}
+    .miniBtn{
+      min-height:48px;border-radius:15px;border:1px solid var(--line);
+      background:white;color:var(--text);font-weight:900;cursor:pointer;
+    }
+    .miniBtn.primary{background:var(--aurubis);border-color:var(--aurubis);color:white}
+    .miniBtn.danger{color:var(--danger)}
+
+    .feed{display:grid;gap:8px;max-height:300px;overflow:auto}
+    .feedItem{
+      display:flex;justify-content:space-between;gap:12px;
+      padding:10px 0;border-bottom:1px solid var(--line);
+      font-size:.94rem;
+    }
+    .feedItem:last-child{border-bottom:0}
+    .feedItem b{font-weight:900}.feedItem time{color:var(--muted);font-weight:800;white-space:nowrap}
+
+    footer{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      color:var(--muted);font-size:.9rem;padding:0 4px 6px;
+    }
+
+    .toast{
+      position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);
+      opacity:0;pointer-events:none;padding:12px 16px;border-radius:15px;
+      background:#102333;color:white;font-weight:900;box-shadow:var(--shadow);transition:.16s ease;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:900px){
+      .app{padding:14px}
+      header{align-items:flex-start;flex-direction:column}
+      .statusBar{justify-content:flex-start}
+      main{grid-template-columns:1fr}
+      .buttons{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:620px){
+      .counter{padding:18px}
+      .quickStats,.buttons{grid-template-columns:1fr}
+      .btn{min-height:112px}
+      footer{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">A</div>
+        <div>
+          <h1>Aurubis Lünen – Personenzähler</h1>
+          <div class="small">Nacht der Ausbildung</div>
+        </div>
+      </div>
+      <div class="statusBar">
+        <div class="chip"><span class="dot pending" id="statusDot"></span><span id="statusText">Bereit</span></div>
+        <button class="iconBtn" id="fullscreenBtn" type="button" title="Vollbild">⛶</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel counter">
+        <div class="totalBox">
+          <div class="label">Aktuell im Bereich</div>
+          <div class="total" id="currentTotal">0</div>
+        </div>
+
+        <div class="quickStats">
+          <div class="stat"><div class="statName">Männlich</div><div class="statValue" id="maleCurrent">0</div></div>
+          <div class="stat"><div class="statName">Weiblich</div><div class="statValue" id="femaleCurrent">0</div></div>
+          <div class="stat"><div class="statName">Peak</div><div class="statValue" id="peakValue">0</div></div>
+        </div>
+
+        <div class="buttons">
+          <button class="btn male" id="btnMaleIn" type="button"><strong>Männlich rein</strong><span>+</span></button>
+          <button class="btn male out" id="btnMaleOut" type="button"><strong>Männlich raus</strong><span>−</span></button>
+          <button class="btn female" id="btnFemaleIn" type="button"><strong>Weiblich rein</strong><span>+</span></button>
+          <button class="btn female out" id="btnFemaleOut" type="button"><strong>Weiblich raus</strong><span>−</span></button>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel side">
+          <div class="sideGrid">
+            <div class="sideStat"><span>Gesamt rein</span><b id="totalInValue">0</b></div>
+            <div class="sideStat"><span>Gesamt raus</span><b id="totalOutValue">0</b></div>
+            <div class="sideStat"><span>Aktionen</span><b id="eventCount">0</b></div>
+            <div class="sideStat"><span>Queue</span><b id="queueValue">0</b></div>
+          </div>
+          <div class="actions">
+            <button class="miniBtn primary" id="syncNowBtn" type="button">Synchronisieren</button>
+            <button class="miniBtn" id="backupBtn" type="button">Backup kopieren</button>
+            <button class="miniBtn danger" id="resetBtn" type="button">Zurücksetzen</button>
+          </div>
+        </section>
+
+        <section class="panel side">
+          <div class="label">Letzte Aktionen</div>
+          <div class="feed" id="activityFeed"></div>
+        </section>
+      </aside>
+    </main>
+
+    <footer>
+      <span id="syncInfo">Letzter Sync: –</span>
+      <span>Auto-Sync: 45 Sek.</span>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const CONFIG = {
+        EVENT_NAME:"Nacht der Ausbildung",
+        EVENT_LOCATION:"Aurubis Lünen",
+        EVENT_DATE:"2026-04-23",
+        FLOW_URL:"DEINE_FLOW_URL",
+        EVENT_TOKEN:"DEIN_EVENT_TOKEN",
+        SYNC_INTERVAL_MS:45000,
+        REQUEST_TIMEOUT_MS:12000,
+        MAX_QUEUE_ITEMS:400,
+        MAX_FEED_ITEMS:30,
+        STORAGE_PREFIX:"nda_simple_"
+      };
+
+      const STORAGE={
+        STATE:CONFIG.STORAGE_PREFIX+"state",
+        QUEUE:CONFIG.STORAGE_PREFIX+"queue",
+        META:CONFIG.STORAGE_PREFIX+"meta",
+        FEED:CONFIG.STORAGE_PREFIX+"feed"
+      };
+
+      const state={maleIn:0,maleOut:0,femaleIn:0,femaleOut:0,peak:0,eventCount:0};
+      const meta={lastSyncAt:null,lastAttemptAt:null,lastError:null,lastSignature:null,sending:false};
+      let queue=[];
+      let feed=[];
+      let syncTimer=null;
+      const $=id=>document.getElementById(id);
+
+      const els={
+        currentTotal:$("currentTotal"),maleCurrent:$("maleCurrent"),femaleCurrent:$("femaleCurrent"),peakValue:$("peakValue"),
+        totalInValue:$("totalInValue"),totalOutValue:$("totalOutValue"),eventCount:$("eventCount"),queueValue:$("queueValue"),
+        statusDot:$("statusDot"),statusText:$("statusText"),activityFeed:$("activityFeed"),syncInfo:$("syncInfo"),toast:$("toast")
+      };
+
+      function nowIso(){return new Date().toISOString()}
+      function formatTime(iso){if(!iso)return"–";return new Date(iso).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
+      function saveJSON(k,v){localStorage.setItem(k,JSON.stringify(v))}
+      function loadJSON(k,f){try{const r=localStorage.getItem(k);return r?JSON.parse(r):f}catch{return f}}
+      function persist(){saveJSON(STORAGE.STATE,state);saveJSON(STORAGE.META,meta);saveJSON(STORAGE.QUEUE,queue.slice(-CONFIG.MAX_QUEUE_ITEMS));saveJSON(STORAGE.FEED,feed.slice(0,CONFIG.MAX_FEED_ITEMS))}
+      function restore(){Object.assign(state,loadJSON(STORAGE.STATE,{}));Object.assign(meta,loadJSON(STORAGE.META,{}));queue=loadJSON(STORAGE.QUEUE,[]);feed=loadJSON(STORAGE.FEED,[]);if(!Array.isArray(queue))queue=[];if(!Array.isArray(feed))feed=[]}
+      function compute(){const maleCurrent=Math.max(0,state.maleIn-state.maleOut);const femaleCurrent=Math.max(0,state.femaleIn-state.femaleOut);return{maleCurrent,femaleCurrent,totalIn:state.maleIn+state.femaleIn,totalOut:state.maleOut+state.femaleOut,totalCurrent:maleCurrent+femaleCurrent}}
+      function snapshot(){const c=compute();return{...state,...c}}
+      function signature(){return JSON.stringify(snapshot())}
+      function toast(msg){els.toast.textContent=msg;els.toast.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>els.toast.classList.remove("show"),1500)}
+      function escapeHTML(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;")}
+
+      function addFeed(title){feed.unshift({title,at:nowIso()});feed=feed.slice(0,CONFIG.MAX_FEED_ITEMS);renderFeed();persist()}
+      function renderFeed(){
+        els.activityFeed.innerHTML="";
+        if(!feed.length){els.activityFeed.innerHTML='<div class="feedItem"><b>Noch keine Aktion</b><time>–</time></div>';return}
+        feed.slice(0,12).forEach(i=>{const row=document.createElement("div");row.className="feedItem";row.innerHTML=`<b>${escapeHTML(i.title)}</b><time>${formatTime(i.at)}</time>`;els.activityFeed.appendChild(row)})
+      }
+
+      function renderStatus(){
+        let cls="pending",txt="Bereit";
+        if(!navigator.onLine){cls="offline";txt="Offline"}
+        else if(meta.sending){cls="pending";txt="Sync …"}
+        else if(queue.length){cls="pending";txt=`${queue.length} offen`}
+        else{cls="online";txt="Online"}
+        els.statusDot.className=`dot ${cls}`;els.statusText.textContent=txt;
+        els.syncInfo.textContent=`Letzter Sync: ${formatTime(meta.lastSyncAt)}`;
+      }
+
+      function render(){
+        const c=compute();
+        els.currentTotal.textContent=c.totalCurrent;
+        els.maleCurrent.textContent=c.maleCurrent;
+        els.femaleCurrent.textContent=c.femaleCurrent;
+        els.totalInValue.textContent=c.totalIn;
+        els.totalOutValue.textContent=c.totalOut;
+        els.peakValue.textContent=state.peak;
+        els.eventCount.textContent=state.eventCount;
+        els.queueValue.textContent=queue.length;
+        renderStatus();
+      }
+
+      function change(kind){
+        if(kind==="maleIn"){state.maleIn++;addFeed("Männlich rein")}
+        if(kind==="femaleIn"){state.femaleIn++;addFeed("Weiblich rein")}
+        if(kind==="maleOut"){
+          if(state.maleOut>=state.maleIn){toast("Keine männlichen Besucher offen");return}
+          state.maleOut++;addFeed("Männlich raus")
+        }
+        if(kind==="femaleOut"){
+          if(state.femaleOut>=state.femaleIn){toast("Keine weiblichen Besucher offen");return}
+          state.femaleOut++;addFeed("Weiblich raus")
+        }
+        state.eventCount++;
+        state.peak=Math.max(state.peak,compute().totalCurrent);
+        persist();render();syncNow("click");
+      }
+
+      function buildPayload(reason){return{token:CONFIG.EVENT_TOKEN,event:CONFIG.EVENT_NAME,location:CONFIG.EVENT_LOCATION,eventDate:CONFIG.EVENT_DATE,reason,sentAt:nowIso(),online:navigator.onLine,counters:snapshot()}}
+      function enqueue(p){queue.push(p);queue=queue.slice(-CONFIG.MAX_QUEUE_ITEMS);persist()}
+      async function postPayload(payload){
+        if(!CONFIG.FLOW_URL||CONFIG.FLOW_URL==="DEINE_FLOW_URL"){meta.lastError="FLOW_URL fehlt";return false}
+        const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),CONFIG.REQUEST_TIMEOUT_MS);
+        try{
+          const res=await fetch(CONFIG.FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:controller.signal});
+          clearTimeout(timeout);if(!res.ok)throw new Error("HTTP "+res.status);
+          meta.lastSyncAt=nowIso();meta.lastError=null;meta.lastSignature=signature();return true;
+        }catch(e){clearTimeout(timeout);meta.lastError=e?.message||"Netzwerkfehler";return false}
+      }
+      async function flushQueue(){
+        if(meta.sending||!navigator.onLine||!queue.length){render();return}
+        meta.sending=true;render();
+        while(queue.length){const ok=await postPayload(queue[0]);if(!ok)break;queue.shift();persist()}
+        meta.sending=false;persist();render();
+      }
+      async function syncNow(reason="manual"){
+        const payload=buildPayload(reason);meta.lastAttemptAt=nowIso();
+        if(reason==="interval"&&signature()===meta.lastSignature){render();return}
+        if(!navigator.onLine){enqueue(payload);render();return}
+        const ok=await postPayload(payload);if(!ok)enqueue(payload);
+        await flushQueue();persist();render();
+      }
+
+      function backup(){navigator.clipboard.writeText(JSON.stringify({exportedAt:nowIso(),state:snapshot(),queue,feed,meta},null,2)).then(()=>toast("Backup kopiert")).catch(()=>toast("Backup nicht kopiert"))}
+      function reset(){if(!confirm("Wirklich zurücksetzen?"))return;Object.assign(state,{maleIn:0,maleOut:0,femaleIn:0,femaleOut:0,peak:0,eventCount:0});queue=[];feed=[];Object.assign(meta,{lastSyncAt:null,lastAttemptAt:null,lastError:null,lastSignature:null,sending:false});persist();renderFeed();render();toast("Zurückgesetzt")}
+      async function fullscreen(){try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch{toast("Vollbild nicht verfügbar")}}
+
+      function bind(){
+        $("btnMaleIn").onclick=()=>change("maleIn");$("btnMaleOut").onclick=()=>change("maleOut");$("btnFemaleIn").onclick=()=>change("femaleIn");$("btnFemaleOut").onclick=()=>change("femaleOut");
+        $("syncNowBtn").onclick=()=>syncNow("manual");$("backupBtn").onclick=backup;$("resetBtn").onclick=reset;$("fullscreenBtn").onclick=fullscreen;
+        window.addEventListener("online",()=>{addFeed("Wieder online");flushQueue();syncNow("online")});
+        window.addEventListener("offline",()=>{addFeed("Offline")});
+        document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")persist();else flushQueue()});
+        window.addEventListener("beforeunload",persist);
+      }
+
+      restore();state.peak=Math.max(state.peak,compute().totalCurrent);renderFeed();render();bind();syncNow("initial");syncTimer=setInterval(()=>syncNow("interval"),CONFIG.SYNC_INTERVAL_MS);
+    })();
+  </script>
+</body>
+</html>
