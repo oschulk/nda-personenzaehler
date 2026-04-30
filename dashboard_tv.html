@@ -22,7 +22,6 @@
       --shadow:0 16px 38px rgba(16,35,51,.08);
       --radius-xl:28px;
       --radius-lg:22px;
-      --radius-md:18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -32,146 +31,51 @@
       color:var(--text);
       background:linear-gradient(180deg,#ffffff 0%, var(--bg) 100%);
     }
-    button{font:inherit}
-    .app{
-      min-height:100%;
-      max-width:1600px;
-      margin:0 auto;
-      padding:18px;
-      display:grid;
-      gap:18px;
-      grid-template-rows:auto 1fr auto;
-    }
+    .app{min-height:100%;max-width:1680px;margin:0 auto;padding:18px;display:grid;gap:18px}
     .header{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius-xl);
-      box-shadow:var(--shadow);
-      padding:18px 24px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
+      background:var(--card);border:1px solid var(--line);border-radius:var(--radius-xl);box-shadow:var(--shadow);
+      padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;
     }
     .brand{display:flex;align-items:center;gap:14px;min-width:0}
-    .logo{
-      width:56px;height:56px;border-radius:16px;
-      background:linear-gradient(135deg,var(--aurubis),#49c9ec);
-      color:#fff;display:grid;place-items:center;
-      font-weight:1000;font-size:28px;flex:0 0 auto;
-    }
+    .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--aurubis),#49c9ec);color:#fff;display:grid;place-items:center;font-weight:1000;font-size:28px;flex:0 0 auto}
     h1{margin:0;font-size:clamp(1.6rem,2.4vw,2.4rem);letter-spacing:-.04em;line-height:1.04}
     .sub{margin-top:5px;color:var(--muted);font-size:1rem}
     .headRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      min-height:46px;padding:10px 14px;border-radius:999px;
-      background:#fbfdfe;border:1px solid var(--line);
-      font-weight:900;font-size:.95rem;white-space:nowrap;
-    }
-    .dot{width:11px;height:11px;border-radius:999px;background:#f2a900}
-    .dot.online{background:var(--good)}
-    .dot.offline{background:var(--bad)}
-    .iconBtn{
-      width:46px;height:46px;border-radius:14px;border:1px solid var(--line);
-      background:#fff;color:var(--text);cursor:pointer;font-weight:1000
-    }
-
-    .main{
-      display:grid;
-      grid-template-columns:1.3fr .7fr;
-      gap:18px;
-      min-height:0;
-    }
-    .leftCol,.rightCol{display:grid;gap:18px;min-height:0}
-    .panel{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius-xl);
-      box-shadow:var(--shadow);
-      min-width:0;
-    }
-    .hero{
-      padding:28px 32px;
-      display:grid;
-      align-items:center;
-      min-height:360px;
-      background:linear-gradient(135deg, rgba(0,143,199,.08), rgba(73,201,236,.04) 45%, #fff 100%);
-    }
-    .eyebrow{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;border:1px solid #d4ebf5;
-      background:#f5fbfe;color:var(--aurubis);font-size:.82rem;font-weight:1000;
-      text-transform:uppercase;letter-spacing:.06em;
-    }
-    .heroLabel{
-      margin-top:18px;color:var(--muted);font-size:1rem;font-weight:900;
-      text-transform:uppercase;letter-spacing:.06em;
-    }
-    .heroNumber{
-      margin-top:10px;
-      font-size:clamp(8rem,19vw,15rem);
-      line-height:.83;
-      letter-spacing:-.09em;
-      font-weight:1000;
-      color:var(--aurubis-dark);
-    }
-    .heroMeta{
-      margin-top:18px;
-      display:flex;flex-wrap:wrap;gap:12px;
-    }
-    .miniPill{
-      display:inline-flex;align-items:center;gap:8px;
-      min-height:44px;padding:9px 13px;border-radius:999px;
-      border:1px solid var(--line);background:#fff;font-weight:900;font-size:.96rem;
-    }
+    .pill{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:10px 14px;border-radius:999px;background:#fbfdfe;border:1px solid var(--line);font-weight:900;font-size:.95rem;white-space:nowrap}
+    .dot{width:11px;height:11px;border-radius:999px;background:#f2a900}.dot.online{background:var(--good)}.dot.offline{background:var(--bad)}
+    .iconBtn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;font-weight:1000}
+    .main{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-xl);box-shadow:var(--shadow);min-width:0}
+    .hero{padding:28px 32px;display:grid;align-items:center;min-height:350px;background:linear-gradient(135deg,rgba(0,143,199,.08),rgba(73,201,236,.04) 45%,#fff 100%)}
+    .eyebrow{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid #d4ebf5;background:#f5fbfe;color:var(--aurubis);font-size:.82rem;font-weight:1000;text-transform:uppercase;letter-spacing:.06em}
+    .heroLabel{margin-top:18px;color:var(--muted);font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+    .heroNumber{margin-top:10px;font-size:clamp(7rem,17vw,13rem);line-height:.83;letter-spacing:-.09em;font-weight:1000;color:var(--aurubis-dark)}
+    .heroMeta{margin-top:18px;display:flex;flex-wrap:wrap;gap:12px}
+    .miniPill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:900;font-size:.96rem}
     .swatch{width:12px;height:12px;border-radius:999px;display:inline-block}
-
     .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .card{
-      padding:22px;
-      min-height:148px;
-      display:grid;
-      align-content:start;
-    }
+    .card{padding:22px;min-height:142px;display:grid;align-content:start}
     .label{color:var(--muted);font-size:.95rem;font-weight:900}
-    .value{
-      margin-top:12px;font-size:clamp(2.8rem,5vw,4.2rem);line-height:.95;
-      letter-spacing:-.06em;font-weight:1000;
-    }
+    .value{margin-top:12px;font-size:clamp(2.5rem,4.6vw,3.8rem);line-height:.95;letter-spacing:-.06em;font-weight:1000}
     .desc{margin-top:8px;color:var(--muted);font-size:.94rem}
-
-    .feedPanel{padding:22px;display:grid;gap:16px;min-height:0}
+    .chartPanel{padding:22px;display:grid;gap:14px}
     .panelTitle{font-size:1.16rem;font-weight:1000;letter-spacing:-.02em}
-    .panelText{color:var(--muted);font-size:.96rem}
-    .feed{display:grid;gap:8px;overflow:auto;min-height:0}
-    .feedItem{
-      display:grid;grid-template-columns:1fr auto;gap:12px;
-      padding:14px 0;border-bottom:1px solid var(--line);
-      font-size:1rem;
-    }
+    .panelText{color:var(--muted);font-size:.96rem;margin-top:4px}
+    .chartTop{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .legend{display:flex;gap:10px;flex-wrap:wrap}
+    .legend .pill{min-height:38px;padding:8px 12px;font-size:.86rem}
+    .chartBox{border:1px solid var(--line);border-radius:var(--radius-lg);background:#fbfdfe;overflow:hidden}
+    canvas{width:100%;height:300px;display:block}
+    .feedPanel{padding:22px;display:grid;gap:14px}
+    .feed{display:grid;gap:8px;max-height:320px;overflow:auto}
+    .feedItem{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
     .feedItem:last-child{border-bottom:0}
-    .feedItem b{font-size:1.02rem;font-weight:1000}
-    .feedItem small{display:block;margin-top:5px;color:var(--muted);font-size:.88rem}
+    .feedItem b{font-weight:1000}
     .feedItem time{color:var(--muted);font-weight:900;white-space:nowrap}
     .empty{padding:12px 0;color:var(--muted);font-weight:800}
-
-    .footer{
-      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
-      color:var(--muted);font-size:.94rem;padding:0 4px 4px;
-    }
-
-    @media (max-width:1200px){
-      .main{grid-template-columns:1fr}
-      .hero{min-height:320px}
-    }
-    @media (max-width:760px){
-      .app{padding:14px}
-      .header{flex-direction:column;align-items:flex-start}
-      .headRight{justify-content:flex-start}
-      .grid3{grid-template-columns:1fr}
-      .heroNumber{font-size:6.5rem}
-    }
+    .footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.94rem;padding:0 4px 4px}
+    @media (max-width:1200px){.main{grid-template-columns:1fr}.hero{min-height:300px}}
+    @media (max-width:760px){.app{padding:14px}.header{flex-direction:column;align-items:flex-start}.headRight{justify-content:flex-start}.grid3{grid-template-columns:1fr}.heroNumber{font-size:6.5rem}}
   </style>
 </head>
 <body>
@@ -192,7 +96,7 @@
     </header>
 
     <main class="main">
-      <div class="leftCol">
+      <section style="display:grid;gap:18px;">
         <section class="panel hero">
           <div>
             <div class="eyebrow">Live-Anzeige</div>
@@ -201,62 +105,58 @@
             <div class="heroMeta">
               <div class="miniPill"><span class="swatch" style="background:var(--male)"></span>Männlich: <span id="maleCurrentChip">0</span></div>
               <div class="miniPill"><span class="swatch" style="background:var(--female)"></span>Weiblich: <span id="femaleCurrentChip">0</span></div>
-              <div class="miniPill"><span class="swatch" style="background:var(--aurubis)"></span>Peak: <span id="peakChip">0</span></div>
+              <div class="miniPill"><span class="swatch" style="background:var(--aurubis)"></span>Peak gesamt: <span id="peakChip">0</span></div>
             </div>
           </div>
         </section>
 
         <section class="grid3">
-          <article class="panel card">
-            <div class="label">Gesamt rein</div>
-            <div class="value" id="totalInValue">0</div>
-            <div class="desc">Alle Eintritte</div>
-          </article>
-          <article class="panel card">
-            <div class="label">Gesamt raus</div>
-            <div class="value" id="totalOutValue">0</div>
-            <div class="desc">Alle Austritte</div>
-          </article>
-          <article class="panel card">
-            <div class="label">Aktionen gesamt</div>
-            <div class="value" id="eventCountValue">0</div>
-            <div class="desc">Alle Klicks</div>
-          </article>
-        </section>
-      </div>
-
-      <aside class="rightCol">
-        <section class="grid3" style="grid-template-columns:1fr;">
-          <article class="panel card">
-            <div class="label">Männlich aktuell</div>
-            <div class="value" id="maleCurrent">0</div>
-            <div class="desc">Momentan im Bereich</div>
-          </article>
-          <article class="panel card">
-            <div class="label">Weiblich aktuell</div>
-            <div class="value" id="femaleCurrent">0</div>
-            <div class="desc">Momentan im Bereich</div>
-          </article>
-          <article class="panel card">
-            <div class="label">Peak</div>
-            <div class="value" id="peakValue">0</div>
-            <div class="desc">Höchster gleichzeitiger Stand</div>
-          </article>
+          <article class="panel card"><div class="label">Gesamt rein</div><div class="value" id="totalInValue">0</div><div class="desc">Alle Eintritte</div></article>
+          <article class="panel card"><div class="label">Gesamt raus</div><div class="value" id="totalOutValue">0</div><div class="desc">Alle Austritte</div></article>
+          <article class="panel card"><div class="label">Peak gesamt</div><div class="value" id="peakValue">0</div><div class="desc">Maximalstand</div></article>
         </section>
 
         <section class="panel feedPanel">
           <div>
-            <div class="panelTitle">Letzte Aktionen</div>
+            <div class="panelTitle">Letzte 5 Aktionen</div>
             <div class="panelText">Nur Anzeige – ohne Bedienung.</div>
           </div>
           <div class="feed" id="activityFeed"></div>
         </section>
-      </aside>
+      </section>
+
+      <section style="display:grid;gap:18px;">
+        <section class="grid3">
+          <article class="panel card"><div class="label">Männlich aktuell</div><div class="value" id="maleCurrent">0</div><div class="desc">Momentan im Bereich</div></article>
+          <article class="panel card"><div class="label">Weiblich aktuell</div><div class="value" id="femaleCurrent">0</div><div class="desc">Momentan im Bereich</div></article>
+          <article class="panel card"><div class="label">Peak männlich</div><div class="value" id="peakMaleValue">0</div><div class="desc">Maximal männlich</div></article>
+          <article class="panel card"><div class="label">Peak weiblich</div><div class="value" id="peakFemaleValue">0</div><div class="desc">Maximal weiblich</div></article>
+          <article class="panel card"><div class="label">Männlich rein</div><div class="value" id="maleInValue">0</div><div class="desc">Eintritte</div></article>
+          <article class="panel card"><div class="label">Weiblich rein</div><div class="value" id="femaleInValue">0</div><div class="desc">Eintritte</div></article>
+        </section>
+
+        <section class="panel chartPanel">
+          <div class="chartTop">
+            <div>
+              <div class="panelTitle">Live-Verlauf</div>
+              <div class="panelText" id="historyInfo">Warte auf Verlaufspunkte …</div>
+            </div>
+            <div class="legend">
+              <div class="pill"><span class="swatch" style="background:#112433"></span>Gesamt</div>
+              <div class="pill"><span class="swatch" style="background:var(--male)"></span>Männlich</div>
+              <div class="pill"><span class="swatch" style="background:var(--female)"></span>Weiblich</div>
+            </div>
+          </div>
+          <div class="chartBox">
+            <canvas id="trendChart" aria-label="Live-Verlauf" role="img"></canvas>
+          </div>
+        </section>
+      </section>
     </main>
 
     <div class="footer">
       <span id="syncInfo">Firebase: verbunden</span>
-      <span>Dashboard-Modus · Nur Anzeige</span>
+      <span>Auto-Reload alle 30 Minuten · Dashboard-Modus</span>
     </div>
   </div>
 
@@ -275,85 +175,58 @@
       measurementId: "G-HK25LZR82X"
     };
 
+    const AUTO_RELOAD_MS = 30 * 60 * 1000;
+    setTimeout(() => location.reload(), AUTO_RELOAD_MS);
+
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-
     const PATH = "nda";
     const counterRef = ref(db, `${PATH}/counter`);
+    const historyRef = ref(db, `${PATH}/history`);
     const feedRef = ref(db, `${PATH}/feed`);
     const connectedRef = ref(db, ".info/connected");
 
-    const DEFAULT_COUNTER = {
-      maleIn:0,
-      maleOut:0,
-      femaleIn:0,
-      femaleOut:0,
-      peak:0,
-      eventCount:0,
-      updatedAt:Date.now(),
-      lastAction:"–"
-    };
-
     const $ = (id) => document.getElementById(id);
     const els = {
-      statusDot: $("statusDot"),
-      statusText: $("statusText"),
-      updatedInfo: $("updatedInfo"),
-      syncInfo: $("syncInfo"),
-      currentTotal: $("currentTotal"),
-      maleCurrentChip: $("maleCurrentChip"),
-      femaleCurrentChip: $("femaleCurrentChip"),
-      peakChip: $("peakChip"),
-      totalInValue: $("totalInValue"),
-      totalOutValue: $("totalOutValue"),
-      eventCountValue: $("eventCountValue"),
-      maleCurrent: $("maleCurrent"),
-      femaleCurrent: $("femaleCurrent"),
-      peakValue: $("peakValue"),
-      activityFeed: $("activityFeed")
+      statusDot:$("statusDot"), statusText:$("statusText"), updatedInfo:$("updatedInfo"), syncInfo:$("syncInfo"),
+      currentTotal:$("currentTotal"), maleCurrentChip:$("maleCurrentChip"), femaleCurrentChip:$("femaleCurrentChip"),
+      peakChip:$("peakChip"), totalInValue:$("totalInValue"), totalOutValue:$("totalOutValue"),
+      maleCurrent:$("maleCurrent"), femaleCurrent:$("femaleCurrent"), peakValue:$("peakValue"),
+      peakMaleValue:$("peakMaleValue"), peakFemaleValue:$("peakFemaleValue"),
+      maleInValue:$("maleInValue"), femaleInValue:$("femaleInValue"),
+      trendChart:$("trendChart"), historyInfo:$("historyInfo"), activityFeed:$("activityFeed")
     };
 
+    const DEFAULT_COUNTER = {maleIn:0,maleOut:0,femaleIn:0,femaleOut:0,peak:0,peakMale:0,peakFemale:0,eventCount:0,updatedAt:Date.now()};
+    let latestCounter = DEFAULT_COUNTER;
+    let latestHistory = [];
     let online = false;
 
-    function n(v){
-      const num = Number(v);
-      return Number.isFinite(num) ? num : 0;
-    }
-
-    function cleanCounter(data){
-      return {
-        maleIn:n(data?.maleIn),
-        maleOut:n(data?.maleOut),
-        femaleIn:n(data?.femaleIn),
-        femaleOut:n(data?.femaleOut),
-        peak:n(data?.peak),
-        eventCount:n(data?.eventCount),
-        updatedAt:data?.updatedAt || Date.now(),
-        lastAction:data?.lastAction || "–"
-      };
-    }
-
+    function n(v){ const num = Number(v); return Number.isFinite(num) ? num : 0; }
     function compute(data){
       const maleCurrent = Math.max(0, n(data.maleIn) - n(data.maleOut));
       const femaleCurrent = Math.max(0, n(data.femaleIn) - n(data.femaleOut));
       const totalIn = n(data.maleIn) + n(data.femaleIn);
       const totalOut = n(data.maleOut) + n(data.femaleOut);
-      const totalCurrent = maleCurrent + femaleCurrent;
-      return { maleCurrent, femaleCurrent, totalIn, totalOut, totalCurrent };
+      return {maleCurrent, femaleCurrent, totalIn, totalOut, totalCurrent: maleCurrent + femaleCurrent};
     }
-
+    function cleanCounter(data){
+      const c = compute(data || DEFAULT_COUNTER);
+      return {
+        maleIn:n(data?.maleIn), maleOut:n(data?.maleOut), femaleIn:n(data?.femaleIn), femaleOut:n(data?.femaleOut),
+        peak:Math.max(n(data?.peak), c.totalCurrent),
+        peakMale:Math.max(n(data?.peakMale), c.maleCurrent),
+        peakFemale:Math.max(n(data?.peakFemale), c.femaleCurrent),
+        eventCount:n(data?.eventCount),
+        updatedAt:data?.updatedAt || Date.now()
+      };
+    }
     function formatTime(value){
       if(!value) return "–";
       return new Date(value).toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit", second:"2-digit"});
     }
-
     function escapeHTML(value){
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
+      return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
     }
 
     function renderStatus(){
@@ -363,19 +236,23 @@
     }
 
     function renderCounter(raw){
-      const data = cleanCounter(raw || DEFAULT_COUNTER);
-      const c = compute(data);
+      latestCounter = cleanCounter(raw || DEFAULT_COUNTER);
+      const c = compute(latestCounter);
       els.currentTotal.textContent = c.totalCurrent;
       els.maleCurrentChip.textContent = c.maleCurrent;
       els.femaleCurrentChip.textContent = c.femaleCurrent;
-      els.peakChip.textContent = data.peak;
+      els.peakChip.textContent = latestCounter.peak;
       els.totalInValue.textContent = c.totalIn;
       els.totalOutValue.textContent = c.totalOut;
-      els.eventCountValue.textContent = data.eventCount;
       els.maleCurrent.textContent = c.maleCurrent;
       els.femaleCurrent.textContent = c.femaleCurrent;
-      els.peakValue.textContent = data.peak;
-      els.updatedInfo.textContent = `Aktualisiert: ${formatTime(data.updatedAt)}`;
+      els.peakValue.textContent = latestCounter.peak;
+      els.peakMaleValue.textContent = latestCounter.peakMale;
+      els.peakFemaleValue.textContent = latestCounter.peakFemale;
+      els.maleInValue.textContent = latestCounter.maleIn;
+      els.femaleInValue.textContent = latestCounter.femaleIn;
+      els.updatedInfo.textContent = `Aktualisiert: ${formatTime(latestCounter.updatedAt)}`;
+      drawChart();
     }
 
     function renderFeed(items){
@@ -387,34 +264,110 @@
       items.slice().reverse().forEach(item => {
         const row = document.createElement("div");
         row.className = "feedItem";
-        row.innerHTML = `
-          <div>
-            <b>${escapeHTML(item.title || "Aktion")}</b>
-            <small>${escapeHTML(item.deviceId || "Live")}</small>
-          </div>
-          <time>${formatTime(item.at)}</time>
-        `;
+        row.innerHTML = `<b>${escapeHTML(item.title || "Aktion")}</b><time>${formatTime(item.at)}</time>`;
         els.activityFeed.appendChild(row);
       });
     }
 
+    function renderHistory(items){
+      latestHistory = items.map(item => ({
+        at: item.at || Date.now(),
+        total: n(item.total),
+        male: n(item.male),
+        female: n(item.female)
+      })).sort((a,b) => n(a.at) - n(b.at));
+      els.historyInfo.textContent = latestHistory.length
+        ? `${latestHistory.length} Verlaufspunkte`
+        : "Noch kein Verlauf. Ab dem nächsten Klick wird er aufgebaut.";
+      drawChart();
+    }
+
+    function chartPoints(){
+      if(latestHistory.length) return latestHistory;
+      const c = compute(latestCounter);
+      return [{at:latestCounter.updatedAt || Date.now(), total:c.totalCurrent, male:c.maleCurrent, female:c.femaleCurrent}];
+    }
+
+    function drawChart(){
+      const points = chartPoints().slice(-80);
+      const canvas = els.trendChart;
+      const width = Math.max(300, canvas.parentElement.clientWidth || 700);
+      const height = 300;
+      const ratio = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      ctx.clearRect(0,0,width,height);
+
+      const pad = {top:24,right:20,bottom:38,left:42};
+      const innerW = width - pad.left - pad.right;
+      const innerH = height - pad.top - pad.bottom;
+      const maxY = Math.max(5, ...points.map(p => p.total), ...points.map(p => p.male), ...points.map(p => p.female));
+
+      ctx.font = "12px Inter, system-ui, sans-serif";
+      for(let i=0;i<=4;i++){
+        const y = pad.top + (innerH / 4) * i;
+        ctx.strokeStyle = "rgba(16,35,51,.08)";
+        ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(width-pad.right,y); ctx.stroke();
+        ctx.fillStyle = "rgba(112,128,140,.9)";
+        ctx.fillText(String(Math.round(maxY - (maxY/4)*i)), 9, y+4);
+      }
+
+      const drawLine = (values, color, fill=false) => {
+        const coords = values.map((v,i) => ({
+          x: pad.left + (innerW / Math.max(1, values.length - 1)) * i,
+          y: pad.top + innerH - (v / maxY) * innerH
+        }));
+
+        if(fill && coords.length){
+          const grad = ctx.createLinearGradient(0, pad.top, 0, height - pad.bottom);
+          grad.addColorStop(0, "rgba(17,36,51,.12)");
+          grad.addColorStop(1, "rgba(17,36,51,0)");
+          ctx.beginPath();
+          coords.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y));
+          ctx.lineTo(coords[coords.length-1].x, height-pad.bottom);
+          ctx.lineTo(coords[0].x, height-pad.bottom);
+          ctx.closePath();
+          ctx.fillStyle = grad; ctx.fill();
+        }
+
+        ctx.beginPath();
+        coords.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y));
+        ctx.strokeStyle = color; ctx.lineWidth = 3; ctx.stroke();
+
+        coords.forEach(p => {
+          ctx.beginPath(); ctx.arc(p.x,p.y,3.2,0,Math.PI*2);
+          ctx.fillStyle = color; ctx.fill();
+        });
+      };
+
+      drawLine(points.map(p => p.total), "#112433", true);
+      drawLine(points.map(p => p.male), "#1976d2");
+      drawLine(points.map(p => p.female), "#c83f8d");
+
+      const labelCount = Math.min(5, points.length);
+      ctx.fillStyle = "rgba(112,128,140,.9)";
+      for(let i=0;i<labelCount;i++){
+        const index = Math.round((points.length - 1) * (i / Math.max(1, labelCount - 1)));
+        const x = pad.left + (innerW / Math.max(1, points.length - 1)) * index;
+        ctx.fillText(formatTime(points[index].at).slice(0,5), Math.max(pad.left, x - 14), height - 13);
+      }
+    }
+
     document.getElementById("fullscreenBtn").addEventListener("click", async () => {
-      try{
-        if(document.fullscreenElement) await document.exitFullscreen();
-        else await document.documentElement.requestFullscreen();
-      }catch{}
+      try{ if(document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }catch{}
     });
+    window.addEventListener("resize", drawChart);
 
-    onValue(connectedRef, (snap) => {
-      online = snap.val() === true;
-      renderStatus();
+    onValue(connectedRef, (snap) => { online = snap.val() === true; renderStatus(); });
+    onValue(counterRef, (snap) => { renderCounter(snap.exists() ? snap.val() : DEFAULT_COUNTER); });
+    onValue(query(historyRef, limitToLast(100)), (snap) => {
+      const items = [];
+      snap.forEach(child => items.push(child.val()));
+      renderHistory(items);
     });
-
-    onValue(counterRef, (snap) => {
-      renderCounter(snap.exists() ? snap.val() : DEFAULT_COUNTER);
-    });
-
-    onValue(query(feedRef, limitToLast(8)), (snap) => {
+    onValue(query(feedRef, limitToLast(5)), (snap) => {
       const items = [];
       snap.forEach(child => items.push(child.val()));
       items.sort((a,b) => n(a.at) - n(b.at));
@@ -423,6 +376,7 @@
 
     renderCounter(DEFAULT_COUNTER);
     renderStatus();
+    drawChart();
   </script>
 </body>
 </html>

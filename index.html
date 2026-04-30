@@ -114,7 +114,6 @@
           <div class="actions">
             <button class="miniBtn primary" id="refreshBtn" type="button">Neu laden</button>
             <button class="miniBtn" id="backupBtn" type="button">Backup kopieren</button>
-            <button class="miniBtn danger" id="resetBtn" type="button">Zurücksetzen</button>
           </div>
         </section>
 
@@ -154,6 +153,7 @@
     const PATH = "nda";
     const counterRef = ref(db, `${PATH}/counter`);
     const feedRef = ref(db, `${PATH}/feed`);
+    const historyRef = ref(db, `${PATH}/history`);
     const connectedRef = ref(db, ".info/connected");
 
     const DEFAULT_COUNTER = {
@@ -162,6 +162,8 @@
       femaleIn:0,
       femaleOut:0,
       peak:0,
+      peakMale:0,
+      peakFemale:0,
       eventCount:0,
       updatedAt:Date.now(),
       lastAction:"Start"
@@ -211,6 +213,8 @@
         femaleIn:n(data?.femaleIn),
         femaleOut:n(data?.femaleOut),
         peak:n(data?.peak),
+        peakMale:n(data?.peakMale),
+        peakFemale:n(data?.peakFemale),
         eventCount:n(data?.eventCount),
         updatedAt:data?.updatedAt || Date.now(),
         lastAction:data?.lastAction || "–"
@@ -289,6 +293,28 @@
       }
     }
 
+    async function addHistory(snapshot, action){
+      try{
+        const c = compute(snapshot);
+        await push(historyRef, {
+          at: Date.now(),
+          action,
+          male: c.maleCurrent,
+          female: c.femaleCurrent,
+          total: c.totalCurrent,
+          totalIn: c.totalIn,
+          totalOut: c.totalOut,
+          peak: n(snapshot.peak),
+          peakMale: n(snapshot.peakMale),
+          peakFemale: n(snapshot.peakFemale),
+          eventCount: n(snapshot.eventCount),
+          deviceId
+        });
+      }catch{
+        // Verlauf ist Zusatzfunktion. Zählen soll trotzdem weiterlaufen.
+      }
+    }
+
     async function change(kind){
       let label = "Aktion";
       let blocked = false;
@@ -312,6 +338,8 @@
 
           const c = compute(s);
           s.peak = Math.max(n(s.peak), c.totalCurrent);
+          s.peakMale = Math.max(n(s.peakMale), c.maleCurrent);
+          s.peakFemale = Math.max(n(s.peakFemale), c.femaleCurrent);
           s.eventCount = n(s.eventCount) + 1;
           s.updatedAt = Date.now();
           s.lastAction = label;
@@ -324,7 +352,9 @@
         }
 
         if(result.committed){
+          const savedSnapshot = result.snapshot.val();
           await addFeed(label);
+          await addHistory(savedSnapshot, label);
         }
       }catch(error){
         console.error(error);
@@ -335,9 +365,12 @@
     async function resetCounter(){
       if(!confirm("Wirklich alle Zähler zurücksetzen?")) return;
       try{
-        await set(counterRef, {...DEFAULT_COUNTER, updatedAt:Date.now(), lastAction:"Zurückgesetzt"});
+        const resetData = {...DEFAULT_COUNTER, updatedAt:Date.now(), lastAction:"Zurückgesetzt"};
+        await set(counterRef, resetData);
         await remove(feedRef);
+        await remove(historyRef);
         await push(feedRef, {title:"Zurückgesetzt", at:Date.now(), deviceId});
+        await push(historyRef, {at:Date.now(), action:"Zurückgesetzt", male:0, female:0, total:0, totalIn:0, totalOut:0, peak:0, eventCount:0, deviceId});
         toast("Zurückgesetzt");
       }catch(error){
         console.error(error);
@@ -372,7 +405,6 @@
       $("btnFemaleOut").onclick = () => change("femaleOut");
       $("refreshBtn").onclick = () => location.reload();
       $("backupBtn").onclick = backup;
-      $("resetBtn").onclick = resetCounter;
       $("fullscreenBtn").onclick = fullscreen;
     }
 
@@ -390,11 +422,11 @@
       renderCounter(snap.val());
     });
 
-    onValue(query(feedRef, limitToLast(12)), (snap) => {
+    onValue(query(feedRef, limitToLast(5)), (snap) => {
       const items = [];
       snap.forEach(child => items.push(child.val()));
       items.sort((a,b) => n(a.at) - n(b.at));
-      renderFeed(items);
+      renderFeed(items.slice(-5));
     });
 
     bind();
