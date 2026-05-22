@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aurubis Lünen – Admin</title>
+<style>
+:root{--bg:#f5f8fa;--card:#fff;--line:#d7e4ec;--text:#102333;--muted:#667785;--aurubis:#008fc7;--good:#149768;--bad:#d64545;--warn:#f2a900;--shadow:0 18px 44px rgba(16,35,51,.085);--radius:24px;--male:#1976d2;--female:#c83f8d;--diverse:#6f42c1}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#fff,#f5f8fa);color:var(--text)}
+.app{max-width:1300px;margin:0 auto;padding:18px;display:grid;gap:16px}
+header,.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+header{position:relative;overflow:hidden;padding:18px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+header:before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,var(--aurubis),#48c2e6,#c96b2c)}
+.brand{display:flex;gap:14px;align-items:center}.logo{width:70px;height:54px}.logo img{width:100%;height:100%;object-fit:contain}
+h1{margin:0;font-size:clamp(1.4rem,2.2vw,2.1rem);letter-spacing:-.04em}.sub{color:var(--muted);margin-top:4px}
+.status{display:flex;gap:10px;flex-wrap:wrap}.pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid var(--line);font-weight:900;background:#fbfdfe}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--bad)}.dot.online{background:var(--good)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{padding:18px}.label{color:var(--muted);font-weight:900;font-size:.9rem}.value{font-size:2.7rem;font-weight:1000;letter-spacing:-.06em;margin-top:8px}
+.main{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{padding:18px}.title{font-weight:1000;font-size:1.15rem}.text{color:var(--muted);margin-top:5px;line-height:1.45}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+button{min-height:52px;border-radius:16px;border:1px solid var(--line);background:#fff;font-weight:1000;cursor:pointer;color:var(--text)}
+button.primary{background:var(--aurubis);border-color:var(--aurubis);color:#fff}
+button.danger{background:#fff1f1;border-color:#ffd2d2;color:#b52828}
+button.warn{background:#fff8e8;border-color:#ffe2a3;color:#8a5a00}
+button:active{transform:scale(.985)}
+.feed{display:grid;gap:8px;max-height:320px;overflow:auto;margin-top:12px}.feedItem{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.feedItem time{color:var(--muted);font-weight:800}
+pre{background:#f7fbfd;border:1px solid var(--line);border-radius:16px;padding:14px;overflow:auto;max-height:300px}
+input{width:100%;min-height:48px;border:1px solid var(--line);border-radius:14px;padding:0 12px;font-weight:800}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(12px);opacity:0;background:#102333;color:white;padding:12px 16px;border-radius:14px;font-weight:900;transition:.16s}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@media(max-width:900px){.grid,.main{grid-template-columns:1fr}.actions{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo"><img src="NDA.F.png" alt="Aurubis Logo"></div>
+    <div><h1>Admin – Personenzähler</h1><div class="sub">Speichern · Exportieren · Löschen · Verbindungsstatus</div></div>
+  </div>
+  <div class="status">
+    <div class="pill"><span class="dot" id="statusDot"></span><span id="statusText">Verbinde …</span></div>
+    <div class="pill" id="updatedInfo">Aktualisiert: –</div>
+  </div>
+</header>
+
+<section class="grid">
+  <div class="panel card"><div class="label">Aktuell</div><div class="value" id="currentTotal">0</div></div>
+  <div class="panel card"><div class="label">Gesamt rein</div><div class="value" id="totalIn">0</div></div>
+  <div class="panel card"><div class="label">Gesamt raus</div><div class="value" id="totalOut">0</div></div>
+  <div class="panel card"><div class="label">Aktionen</div><div class="value" id="eventCount">0</div></div>
+</section>
+
+<section class="grid">
+  <div class="panel card"><div class="label">Männlich</div><div class="value" id="male">0</div></div>
+  <div class="panel card"><div class="label">Weiblich</div><div class="value" id="female">0</div></div>
+  <div class="panel card"><div class="label">Divers</div><div class="value" id="diverse">0</div></div>
+  <div class="panel card"><div class="label">Peak</div><div class="value" id="peak">0</div></div>
+</section>
+
+<main class="main">
+<section class="panel">
+  <div class="title">Export & Speicherung</div>
+  <div class="text">CSV lässt sich direkt mit Excel öffnen. JSON ist das komplette Backup.</div>
+  <div class="actions">
+    <button class="primary" id="exportCsvBtn">Excel / CSV erstellen</button>
+    <button id="exportJsonBtn">JSON-Backup speichern</button>
+    <button id="copyBackupBtn">Backup kopieren</button>
+    <button id="reloadBtn">Neu laden</button>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="title">Daten löschen / zurücksetzen</div>
+  <div class="text">Zum Löschen muss „LÖSCHEN“ eingetragen werden.</div>
+  <input id="confirmInput" placeholder="LÖSCHEN eingeben">
+  <div class="actions">
+    <button class="warn" id="resetCounterBtn">Nur Zähler zurücksetzen</button>
+    <button class="danger" id="deleteHistoryBtn">Verlauf löschen</button>
+    <button class="danger" id="deleteFeedBtn">Aktionen löschen</button>
+    <button class="danger" id="deleteAllBtn">Alles löschen</button>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="title">Letzte Aktionen</div>
+  <div class="feed" id="feed"></div>
+</section>
+
+<section class="panel">
+  <div class="title">Systemstatus</div>
+  <pre id="debugBox">Wird geladen …</pre>
+</section>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getDatabase, ref, onValue, query, limitToLast, get, set, remove } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCmArIvvc4ikmtJS3POHL0Wq0l5v9kJ1SY",
+  authDomain: "nda-personenzaehler.firebaseapp.com",
+  databaseURL: "https://nda-personenzaehler-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "nda-personenzaehler",
+  storageBucket: "nda-personenzaehler.firebasestorage.app",
+  messagingSenderId: "1056682674334",
+  appId: "1:1056682674334:web:dc270c8bb1dba8ce51538f",
+  measurementId: "G-HK25LZR82X"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const PATH = "nda";
+
+const refs = {
+  root: ref(db, PATH),
+  counter: ref(db, `${PATH}/counter`),
+  history: ref(db, `${PATH}/history`),
+  feed: ref(db, `${PATH}/feed`),
+  connected: ref(db, ".info/connected")
+};
+
+const DEFAULT_COUNTER = {
+  maleIn:0,maleOut:0,femaleIn:0,femaleOut:0,diverseIn:0,diverseOut:0,
+  peak:0,peakMale:0,peakFemale:0,peakDiverse:0,eventCount:0,updatedAt:Date.now(),lastAction:"Admin Reset"
+};
+
+const $ = id => document.getElementById(id);
+let online = false;
+let latestCounter = DEFAULT_COUNTER;
+let latestFeed = [];
+let latestHistory = [];
+
+function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
+function time(v){return v?new Date(v).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"}):"–"}
+function dateTime(v){return v?new Date(v).toLocaleString("de-DE"):"–"}
+function compute(s){
+  const male=Math.max(0,n(s.maleIn)-n(s.maleOut));
+  const female=Math.max(0,n(s.femaleIn)-n(s.femaleOut));
+  const diverse=Math.max(0,n(s.diverseIn)-n(s.diverseOut));
+  const totalIn=n(s.maleIn)+n(s.femaleIn)+n(s.diverseIn);
+  const totalOut=n(s.maleOut)+n(s.femaleOut)+n(s.diverseOut);
+  return {male,female,diverse,totalIn,totalOut,current:male+female+diverse};
+}
+function toast(msg){
+  $("toast").textContent=msg;
+  $("toast").classList.add("show");
+  clearTimeout(toast.t);
+  toast.t=setTimeout(()=>$("toast").classList.remove("show"),1600);
+}
+function requireConfirm(){
+  if($("confirmInput").value.trim() !== "LÖSCHEN"){
+    toast("Bitte zuerst LÖSCHEN eingeben");
+    return false;
+  }
+  return true;
+}
+function render(){
+  const c=compute(latestCounter);
+  $("currentTotal").textContent=c.current;
+  $("totalIn").textContent=c.totalIn;
+  $("totalOut").textContent=c.totalOut;
+  $("eventCount").textContent=n(latestCounter.eventCount);
+  $("male").textContent=c.male;
+  $("female").textContent=c.female;
+  $("diverse").textContent=c.diverse;
+  $("peak").textContent=n(latestCounter.peak);
+  $("updatedInfo").textContent=`Aktualisiert: ${time(latestCounter.updatedAt)}`;
+
+  $("statusDot").className=`dot ${online?"online":""}`;
+  $("statusText").textContent=online?"Firebase verbunden":"Firebase getrennt";
+
+  $("feed").innerHTML = latestFeed.length ? "" : "<div>Keine Aktionen vorhanden.</div>";
+  latestFeed.slice().reverse().forEach(item=>{
+    const row=document.createElement("div");
+    row.className="feedItem";
+    row.innerHTML=`<b>${item.title||"Aktion"}</b><time>${time(item.at)}</time>`;
+    $("feed").appendChild(row);
+  });
+
+  $("debugBox").textContent=JSON.stringify({
+    firebase: online ? "verbunden" : "getrennt",
+    counterPath: `${PATH}/counter`,
+    historyItems: latestHistory.length,
+    feedItems: latestFeed.length,
+    lastUpdated: dateTime(latestCounter.updatedAt),
+    counter: latestCounter
+  },null,2);
+}
+function download(filename, text, type="text/plain"){
+  const blob=new Blob([text],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=filename;a.click();
+  URL.revokeObjectURL(url);
+}
+async function collectBackup(){
+  const rootSnap = await get(refs.root);
+  return {
+    exportedAt:new Date().toISOString(),
+    path:PATH,
+    data:rootSnap.exists()?rootSnap.val():{}
+  };
+}
+function csvEscape(v){return `"${String(v??"").replaceAll('"','""')}"`}
+async function exportCsv(){
+  const backup = await collectBackup();
+  const data = backup.data || {};
+  const counter = data.counter || {};
+  const history = data.history ? Object.values(data.history) : [];
+  const rows = [
+    ["Zeit","Aktion","Gesamt","Männlich","Weiblich","Divers","Gesamt rein","Gesamt raus"]
+  ];
+  history.sort((a,b)=>n(a.at)-n(b.at)).forEach(h=>{
+    rows.push([
+      dateTime(h.at), h.action||"", n(h.total), n(h.male), n(h.female), n(h.diverse), n(h.totalIn), n(h.totalOut)
+    ]);
+  });
+  if(rows.length===1){
+    const c=compute(counter);
+    rows.push([dateTime(counter.updatedAt),"Aktueller Stand",c.current,c.male,c.female,c.diverse,c.totalIn,c.totalOut]);
+  }
+  const csv = "\uFEFF" + rows.map(r=>r.map(csvEscape).join(";")).join("\n");
+  download(`nda-export-${new Date().toISOString().slice(0,10)}.csv`, csv, "text/csv;charset=utf-8");
+  toast("CSV erstellt");
+}
+async function exportJson(){
+  const backup=await collectBackup();
+  download(`nda-backup-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(backup,null,2), "application/json");
+  toast("JSON gespeichert");
+}
+async function copyBackup(){
+  const backup=await collectBackup();
+  await navigator.clipboard.writeText(JSON.stringify(backup,null,2));
+  toast("Backup kopiert");
+}
+async function resetCounter(){
+  if(!requireConfirm())return;
+  await set(refs.counter, DEFAULT_COUNTER);
+  toast("Zähler zurückgesetzt");
+}
+async function deleteHistory(){
+  if(!requireConfirm())return;
+  await remove(refs.history);
+  toast("Verlauf gelöscht");
+}
+async function deleteFeed(){
+  if(!requireConfirm())return;
+  await remove(refs.feed);
+  toast("Aktionen gelöscht");
+}
+async function deleteAll(){
+  if(!requireConfirm())return;
+  await set(refs.root,{counter:DEFAULT_COUNTER});
+  toast("Alles gelöscht");
+}
+
+$("exportCsvBtn").onclick=exportCsv;
+$("exportJsonBtn").onclick=exportJson;
+$("copyBackupBtn").onclick=copyBackup;
+$("reloadBtn").onclick=()=>location.reload();
+$("resetCounterBtn").onclick=resetCounter;
+$("deleteHistoryBtn").onclick=deleteHistory;
+$("deleteFeedBtn").onclick=deleteFeed;
+$("deleteAllBtn").onclick=deleteAll;
+
+onValue(refs.connected,s=>{online=s.val()===true;render()});
+onValue(refs.counter,s=>{latestCounter=s.exists()?s.val():DEFAULT_COUNTER;render()});
+onValue(query(refs.feed,limitToLast(10)),s=>{latestFeed=[];s.forEach(c=>latestFeed.push(c.val()));latestFeed.sort((a,b)=>n(a.at)-n(b.at));render()});
+onValue(query(refs.history,limitToLast(500)),s=>{latestHistory=[];s.forEach(c=>latestHistory.push(c.val()));render()});
+
+render();
+</script>
+</body>
+</html>
