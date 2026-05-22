@@ -768,87 +768,85 @@
       });
     }
 
-    async function change(kind){
-      let label = "Aktion";
-      let blocked = false;
+  async function change(kind){
+  let label = "Aktion";
+  let blocked = false;
+  let finalSnapshot = null;
 
-      try{
-        const result = await runTransaction(counterRef,current=>{
-          const s = cleanCounter(current || DEFAULT_COUNTER);
+  try{
+    await runTransaction(counterRef,current=>{
+      const s = cleanCounter(current || DEFAULT_COUNTER);
 
-          if(kind === "maleIn"){
-            s.maleIn += 1;
-            label = "Männlich rein";
-          }
+      if(kind === "maleIn"){ s.maleIn += 1; label = "Männlich rein"; }
+      if(kind === "femaleIn"){ s.femaleIn += 1; label = "Weiblich rein"; }
+      if(kind === "diverseIn"){ s.diverseIn += 1; label = "Divers rein"; }
 
-          if(kind === "femaleIn"){
-            s.femaleIn += 1;
-            label = "Weiblich rein";
-          }
-
-          if(kind === "diverseIn"){
-            s.diverseIn += 1;
-            label = "Divers rein";
-          }
-
-          if(kind === "maleOut"){
-            if(s.maleOut >= s.maleIn){
-              blocked = true;
-              return s;
-            }
-            s.maleOut += 1;
-            label = "Männlich raus";
-          }
-
-          if(kind === "femaleOut"){
-            if(s.femaleOut >= s.femaleIn){
-              blocked = true;
-              return s;
-            }
-            s.femaleOut += 1;
-            label = "Weiblich raus";
-          }
-
-          if(kind === "diverseOut"){
-            if(s.diverseOut >= s.diverseIn){
-              blocked = true;
-              return s;
-            }
-            s.diverseOut += 1;
-            label = "Divers raus";
-          }
-
-          if(blocked) return s;
-
-          const c = compute(s);
-
-          s.peak = Math.max(n(s.peak),c.totalCurrent);
-          s.peakMale = Math.max(n(s.peakMale),c.maleCurrent);
-          s.peakFemale = Math.max(n(s.peakFemale),c.femaleCurrent);
-          s.peakDiverse = Math.max(n(s.peakDiverse),c.diverseCurrent);
-
-          s.eventCount = n(s.eventCount)+1;
-          s.updatedAt = Date.now();
-          s.lastAction = label;
-
-          return s;
-        });
-
-        if(blocked){
-          toast("Keine Besucher in dieser Kategorie offen");
-          return;
-        }
-
-        const snap = result.snapshot.val();
-
-        await addFeed(label);
-        await addHistory(snap,label);
-
-      }catch(error){
-        console.error(error);
-        toast("Firebase-Fehler");
+      if(kind === "maleOut"){
+        if(s.maleOut >= s.maleIn){ blocked = true; return s; }
+        s.maleOut += 1; label = "Männlich raus";
       }
+
+      if(kind === "femaleOut"){
+        if(s.femaleOut >= s.femaleIn){ blocked = true; return s; }
+        s.femaleOut += 1; label = "Weiblich raus";
+      }
+
+      if(kind === "diverseOut"){
+        if(s.diverseOut >= s.diverseIn){ blocked = true; return s; }
+        s.diverseOut += 1; label = "Divers raus";
+      }
+
+      const c = compute(s);
+
+      s.peak = Math.max(n(s.peak), c.totalCurrent);
+      s.peakMale = Math.max(n(s.peakMale), c.maleCurrent);
+      s.peakFemale = Math.max(n(s.peakFemale), c.femaleCurrent);
+      s.peakDiverse = Math.max(n(s.peakDiverse), c.diverseCurrent);
+      s.eventCount = n(s.eventCount) + 1;
+      s.updatedAt = Date.now();
+      s.lastAction = label;
+
+      finalSnapshot = {...s};
+      return s;
+    });
+
+    if(blocked || !finalSnapshot){
+      toast("Keine Besucher in dieser Kategorie offen");
+      return;
     }
+
+    const c = compute(finalSnapshot);
+    const now = Date.now();
+
+    await push(feedRef,{
+      title:label,
+      at:now,
+      deviceId
+    });
+
+    await push(historyRef,{
+      at:now,
+      timestamp:now,
+      action:label,
+      male:c.maleCurrent,
+      female:c.femaleCurrent,
+      diverse:c.diverseCurrent,
+      total:c.totalCurrent,
+      totalIn:c.totalIn,
+      totalOut:c.totalOut,
+      peak:n(finalSnapshot.peak),
+      peakMale:n(finalSnapshot.peakMale),
+      peakFemale:n(finalSnapshot.peakFemale),
+      peakDiverse:n(finalSnapshot.peakDiverse),
+      eventCount:n(finalSnapshot.eventCount),
+      deviceId
+    });
+
+  }catch(error){
+    console.error(error);
+    toast("Firebase-Fehler");
+  }
+}
 
     function backup(){
       const c = compute(latestCounter);
