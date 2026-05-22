@@ -6,86 +6,438 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="color-scheme" content="light">
   <title>Aurubis Lünen – Personenzähler</title>
+
   <style>
     :root{
-      --bg:#f5f8fa; --card:#ffffff; --text:#102333; --muted:#667785; --line:#d7e4ec;
-      --aurubis:#008fc7; --aurubis-dark:#006b9a; --aurubis-light:#e8f6fb; --copper:#c96b2c;
-      --male:#1976d2; --female:#c83f8d; --diverse:#6f42c1;
-      --good:#0f9f6e; --danger:#d64545; --shadow:0 16px 38px rgba(16,35,51,.085); --radius:24px;
+      --bg:#f5f8fa;
+      --card:#ffffff;
+      --text:#102333;
+      --muted:#667785;
+      --line:#d7e4ec;
+      --aurubis:#008fc7;
+      --aurubis-dark:#006b9a;
+      --copper:#c96b2c;
+      --male:#1976d2;
+      --female:#c83f8d;
+      --diverse:#6f42c1;
+      --good:#0f9f6e;
+      --danger:#d64545;
+      --shadow:0 16px 38px rgba(16,35,51,.085);
+      --radius:24px;
     }
+
     *{box-sizing:border-box}
+
     html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:
-      radial-gradient(900px 420px at 15% -10%, rgba(0,143,199,.10), transparent 60%),
-      linear-gradient(180deg,#fff 0%,var(--bg) 100%)}
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 420px at 15% -10%, rgba(0,143,199,.10), transparent 60%),
+        linear-gradient(180deg,#fff 0%,var(--bg) 100%);
+    }
+
     button{font:inherit}
-    .app{max-width:1120px;margin:0 auto;padding:18px;min-height:100%;display:grid;gap:16px;grid-template-rows:auto 1fr auto}
-    header{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    header::before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,var(--aurubis),#48c2e6 68%,var(--copper));}
-    .brand{display:flex;align-items:center;gap:13px;min-width:0}
-    .logo{width:64px;height:54px;border-radius:0;background:transparent;display:grid;place-items:center;flex:0 0 auto}
-    .logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-    h1{margin:0;font-size:clamp(1.3rem,2.2vw,2rem);letter-spacing:-.035em;line-height:1.05}
-    .sub{color:var(--muted);font-size:.94rem;margin-top:3px}
-    .status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .chip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 12px;border-radius:999px;background:#f8fbfd;border:1px solid var(--line);font-weight:900;font-size:.9rem;white-space:nowrap}
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--danger)}
+
+    .app{
+      max-width:1120px;
+      margin:0 auto;
+      padding:18px;
+      min-height:100%;
+      display:grid;
+      gap:16px;
+      grid-template-rows:auto 1fr auto;
+    }
+
+    header{
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:16px 18px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    header::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      width:100%;
+      height:6px;
+      background:linear-gradient(90deg,var(--aurubis),#48c2e6 68%,var(--copper));
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:13px;
+      min-width:0;
+    }
+
+    .logo{
+      width:64px;
+      height:54px;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+
+    .logo img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(1.3rem,2.2vw,2rem);
+      letter-spacing:-.035em;
+      line-height:1.05;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:.94rem;
+      margin-top:3px;
+    }
+
+    .status{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:40px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#f8fbfd;
+      border:1px solid var(--line);
+      font-weight:900;
+      font-size:.9rem;
+      white-space:nowrap;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--danger);
+    }
+
     .dot.online{background:var(--good)}
-    .iconBtn{width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:white;color:var(--text);cursor:pointer;display:grid;place-items:center;font-weight:1000}
-    main{display:grid;grid-template-columns:1fr 330px;gap:16px;align-items:start}
-    .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .counter{position:relative;overflow:hidden;padding:26px;display:grid;gap:20px}
-    .counter::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,143,199,.06),transparent 42%,rgba(201,107,44,.035));pointer-events:none}
-    .totalBox{text-align:center;padding:18px 10px 8px}
-    .label{color:var(--muted);font-weight:900;letter-spacing:.04em;text-transform:uppercase;font-size:.8rem}
-    .total{margin-top:8px;color:var(--aurubis-dark);font-size:clamp(6rem,15vw,11rem);line-height:.85;font-weight:1000;letter-spacing:-.08em;text-shadow:0 8px 24px rgba(0,143,199,.10)}
-    .quickStats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-    .stat{border:1px solid var(--line);border-radius:18px;padding:14px;background:#fbfdfe}
-    .statName{color:var(--muted);font-size:.85rem;font-weight:900}
-    .statValue{margin-top:6px;font-size:2rem;line-height:1;font-weight:1000;letter-spacing:-.04em}
-    .buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .btn{min-height:145px;border:0;border-radius:22px;color:white;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:22px;box-shadow:0 12px 26px rgba(16,35,51,.13);position:relative;overflow:hidden}
-    .btn strong{display:block;font-size:1.42rem;letter-spacing:-.03em;line-height:1.05}
-    .btn span{font-size:3rem;font-weight:1000;line-height:1}
+
+    .iconBtn{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:white;
+      color:var(--text);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      font-weight:1000;
+    }
+
+    main{
+      display:grid;
+      grid-template-columns:1fr 330px;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .counter{
+      position:relative;
+      overflow:hidden;
+      padding:26px;
+      display:grid;
+      gap:20px;
+    }
+
+    .counter::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg,rgba(0,143,199,.06),transparent 42%,rgba(201,107,44,.035));
+      pointer-events:none;
+    }
+
+    .totalBox{
+      position:relative;
+      text-align:center;
+      padding:18px 10px 8px;
+    }
+
+    .label{
+      color:var(--muted);
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      font-size:.8rem;
+    }
+
+    .total{
+      margin-top:8px;
+      color:var(--aurubis-dark);
+      font-size:clamp(6rem,15vw,11rem);
+      line-height:.85;
+      font-weight:1000;
+      letter-spacing:-.08em;
+      text-shadow:0 8px 24px rgba(0,143,199,.10);
+    }
+
+    .quickStats{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+
+    .stat{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:#fbfdfe;
+    }
+
+    .statName{
+      color:var(--muted);
+      font-size:.85rem;
+      font-weight:900;
+    }
+
+    .statValue{
+      margin-top:6px;
+      font-size:2rem;
+      line-height:1;
+      font-weight:1000;
+      letter-spacing:-.04em;
+    }
+
+    .buttons{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .btn{
+      min-height:145px;
+      border:0;
+      border-radius:22px;
+      color:white;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px;
+      box-shadow:0 12px 26px rgba(16,35,51,.13);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .btn strong{
+      display:block;
+      font-size:1.42rem;
+      letter-spacing:-.03em;
+      line-height:1.05;
+    }
+
+    .btn span{
+      font-size:3rem;
+      font-weight:1000;
+      line-height:1;
+    }
+
     .btn:active,.miniBtn:active,.iconBtn:active{transform:scale(.985)}
+
     .male{background:linear-gradient(135deg,#2894e8,var(--male))}
     .female{background:linear-gradient(135deg,#dd6eaa,var(--female))}
     .diverse{background:linear-gradient(135deg,#8b63d9,var(--diverse))}
     .out{opacity:.82}
-    .btn::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 42%);pointer-events:none}
-    aside{display:grid;gap:16px}
-    .side{padding:17px;display:grid;gap:13px}
-    .sideGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .sideStat{padding:14px;border:1px solid var(--line);border-radius:16px;background:#fbfdfe}
-    .sideStat span{color:var(--muted);font-weight:800;font-size:.88rem}
-    .sideStat b{display:block;font-size:1.8rem;line-height:1;margin-top:5px;letter-spacing:-.04em}
-    .actions{display:grid;gap:10px}
-    .miniBtn{min-height:48px;border-radius:15px;border:1px solid var(--line);background:white;color:var(--text);font-weight:900;cursor:pointer}
-    .miniBtn.primary{background:var(--aurubis);border-color:var(--aurubis);color:white}
-    .feed{display:grid;gap:8px;max-height:275px;overflow:auto}
-    .feedItem{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.94rem}
+
+    .btn::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 42%);
+      pointer-events:none;
+    }
+
+    aside{
+      display:grid;
+      gap:16px;
+    }
+
+    .side{
+      padding:17px;
+      display:grid;
+      gap:13px;
+    }
+
+    .sideGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .sideStat{
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fbfdfe;
+    }
+
+    .sideStat span{
+      color:var(--muted);
+      font-weight:800;
+      font-size:.88rem;
+    }
+
+    .sideStat b{
+      display:block;
+      font-size:1.8rem;
+      line-height:1;
+      margin-top:5px;
+      letter-spacing:-.04em;
+    }
+
+    .actions{
+      display:grid;
+      gap:10px;
+    }
+
+    .miniBtn{
+      min-height:48px;
+      border-radius:15px;
+      border:1px solid var(--line);
+      background:white;
+      color:var(--text);
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .miniBtn.primary{
+      background:var(--aurubis);
+      border-color:var(--aurubis);
+      color:white;
+    }
+
+    .feed{
+      display:grid;
+      gap:8px;
+      max-height:275px;
+      overflow:auto;
+    }
+
+    .feedItem{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+      font-size:.94rem;
+    }
+
     .feedItem:last-child{border-bottom:0}
+
     .feedItem b{font-weight:900}
-    .feedItem time{color:var(--muted);font-weight:800;white-space:nowrap}
-    footer{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:.9rem;padding:0 4px 6px}
-    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);opacity:0;pointer-events:none;padding:12px 16px;border-radius:15px;background:#102333;color:white;font-weight:900;box-shadow:var(--shadow);transition:.16s ease}
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-    @media(max-width:900px){.app{padding:14px}header{align-items:flex-start;flex-direction:column}.status{justify-content:flex-start}main{grid-template-columns:1fr}.buttons{grid-template-columns:1fr 1fr}}
-    @media(max-width:620px){.counter{padding:18px}.quickStats,.buttons{grid-template-columns:1fr}.btn{min-height:112px}footer{flex-direction:column;align-items:flex-start}}
+
+    .feedItem time{
+      color:var(--muted);
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:var(--muted);
+      font-size:.9rem;
+      padding:0 4px 6px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%) translateY(14px);
+      opacity:0;
+      pointer-events:none;
+      padding:12px 16px;
+      border-radius:15px;
+      background:#102333;
+      color:white;
+      font-weight:900;
+      box-shadow:var(--shadow);
+      transition:.16s ease;
+      z-index:999;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media(max-width:900px){
+      .app{padding:14px}
+      header{align-items:flex-start;flex-direction:column}
+      .status{justify-content:flex-start}
+      main{grid-template-columns:1fr}
+      .buttons{grid-template-columns:1fr 1fr}
+    }
+
+    @media(max-width:620px){
+      .counter{padding:18px}
+      .quickStats,.buttons{grid-template-columns:1fr}
+      .btn{min-height:112px}
+      footer{flex-direction:column;align-items:flex-start}
+    }
   </style>
 </head>
+
 <body>
   <div class="app">
     <header>
       <div class="brand">
-        <div class="logo"><img src="NDA.F.png" alt="Aurubis Logo"></div>
+        <div class="logo">
+          <img src="NDA.F.png" alt="Aurubis Logo">
+        </div>
         <div>
           <h1>Aurubis Lünen – Personenzähler</h1>
           <div class="sub">Nacht der Ausbildung · Besucherzählung</div>
         </div>
       </div>
+
       <div class="status">
-        <div class="chip"><span class="dot" id="statusDot"></span><span id="statusText">Verbinde …</span></div>
+        <div class="chip">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText">Verbinde …</span>
+        </div>
         <button class="iconBtn" id="fullscreenBtn" type="button" title="Vollbild">⛶</button>
       </div>
     </header>
@@ -98,19 +450,54 @@
         </div>
 
         <div class="quickStats">
-          <div class="stat"><div class="statName">Männlich</div><div class="statValue" id="maleCurrent">0</div></div>
-          <div class="stat"><div class="statName">Weiblich</div><div class="statValue" id="femaleCurrent">0</div></div>
-          <div class="stat"><div class="statName">Divers</div><div class="statValue" id="diverseCurrent">0</div></div>
-          <div class="stat"><div class="statName">Peak</div><div class="statValue" id="peakValue">0</div></div>
+          <div class="stat">
+            <div class="statName">Männlich</div>
+            <div class="statValue" id="maleCurrent">0</div>
+          </div>
+          <div class="stat">
+            <div class="statName">Weiblich</div>
+            <div class="statValue" id="femaleCurrent">0</div>
+          </div>
+          <div class="stat">
+            <div class="statName">Divers</div>
+            <div class="statValue" id="diverseCurrent">0</div>
+          </div>
+          <div class="stat">
+            <div class="statName">Peak</div>
+            <div class="statValue" id="peakValue">0</div>
+          </div>
         </div>
 
         <div class="buttons">
-          <button class="btn male" id="btnMaleIn" type="button"><strong>♂ Männlich rein</strong><span>+</span></button>
-          <button class="btn male out" id="btnMaleOut" type="button"><strong>♂ Männlich raus</strong><span>−</span></button>
-          <button class="btn female" id="btnFemaleIn" type="button"><strong>♀ Weiblich rein</strong><span>+</span></button>
-          <button class="btn female out" id="btnFemaleOut" type="button"><strong>♀ Weiblich raus</strong><span>−</span></button>
-          <button class="btn diverse" id="btnDiverseIn" type="button"><strong>⚧ Divers rein</strong><span>+</span></button>
-          <button class="btn diverse out" id="btnDiverseOut" type="button"><strong>⚧ Divers raus</strong><span>−</span></button>
+          <button class="btn male" id="btnMaleIn" type="button">
+            <strong>♂ Männlich rein</strong>
+            <span>+</span>
+          </button>
+
+          <button class="btn male out" id="btnMaleOut" type="button">
+            <strong>♂ Männlich raus</strong>
+            <span>−</span>
+          </button>
+
+          <button class="btn female" id="btnFemaleIn" type="button">
+            <strong>♀ Weiblich rein</strong>
+            <span>+</span>
+          </button>
+
+          <button class="btn female out" id="btnFemaleOut" type="button">
+            <strong>♀ Weiblich raus</strong>
+            <span>−</span>
+          </button>
+
+          <button class="btn diverse" id="btnDiverseIn" type="button">
+            <strong>⚧ Divers rein</strong>
+            <span>+</span>
+          </button>
+
+          <button class="btn diverse out" id="btnDiverseOut" type="button">
+            <strong>⚧ Divers raus</strong>
+            <span>−</span>
+          </button>
         </div>
       </section>
 
@@ -124,6 +511,7 @@
             <div class="sideStat"><span>Peak divers</span><b id="peakDiverseValue">0</b></div>
             <div class="sideStat"><span>Aktionen</span><b id="eventCountValue">0</b></div>
           </div>
+
           <div class="actions">
             <button class="miniBtn primary" id="refreshBtn" type="button">Neu laden</button>
             <button class="miniBtn" id="backupBtn" type="button">Backup kopieren</button>
@@ -147,7 +535,15 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getDatabase, ref, onValue, runTransaction, push, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      runTransaction,
+      push,
+      query,
+      limitToLast
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCmArIvvc4ikmtJS3POHL0Wq0l5v9kJ1SY",
@@ -170,14 +566,22 @@
     const connectedRef = ref(db, ".info/connected");
 
     const DEFAULT_COUNTER = {
-      maleIn:0,maleOut:0,
-      femaleIn:0,femaleOut:0,
-      diverseIn:0,diverseOut:0,
-      peak:0,peakMale:0,peakFemale:0,peakDiverse:0,
-      eventCount:0,updatedAt:Date.now(),lastAction:"Start"
+      maleIn:0,
+      maleOut:0,
+      femaleIn:0,
+      femaleOut:0,
+      diverseIn:0,
+      diverseOut:0,
+      peak:0,
+      peakMale:0,
+      peakFemale:0,
+      peakDiverse:0,
+      eventCount:0,
+      updatedAt:Date.now(),
+      lastAction:"Start"
     };
 
-    const $ = (id) => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
     const els = {
       currentTotal:$("currentTotal"),
@@ -203,26 +607,30 @@
     let latestCounter = {...DEFAULT_COUNTER};
 
     const deviceId = (() => {
-      const k = "nda_firebase_device_id";
-      let id = localStorage.getItem(k);
+      const key = "nda_firebase_device_id";
+      let id = localStorage.getItem(key);
+
       if(!id){
-        id = "gerät-" + Math.random().toString(16).slice(2,8);
-        localStorage.setItem(k,id);
+        id = "geraet-" + Math.random().toString(16).slice(2,8);
+        localStorage.setItem(key,id);
       }
+
       return id;
     })();
 
-    function n(v){
-      const num = Number(v);
-      return Number.isFinite(num) ? num : 0;
+    function n(value){
+      const number = Number(value);
+      return Number.isFinite(number) ? number : 0;
     }
 
-    function compute(s = latestCounter){
-      const maleCurrent = Math.max(0,n(s.maleIn)-n(s.maleOut));
-      const femaleCurrent = Math.max(0,n(s.femaleIn)-n(s.femaleOut));
-      const diverseCurrent = Math.max(0,n(s.diverseIn)-n(s.diverseOut));
-      const totalIn = n(s.maleIn)+n(s.femaleIn)+n(s.diverseIn);
-      const totalOut = n(s.maleOut)+n(s.femaleOut)+n(s.diverseOut);
+    function compute(counter = latestCounter){
+      const maleCurrent = Math.max(0,n(counter.maleIn)-n(counter.maleOut));
+      const femaleCurrent = Math.max(0,n(counter.femaleIn)-n(counter.femaleOut));
+      const diverseCurrent = Math.max(0,n(counter.diverseIn)-n(counter.diverseOut));
+
+      const totalIn = n(counter.maleIn)+n(counter.femaleIn)+n(counter.diverseIn);
+      const totalOut = n(counter.maleOut)+n(counter.femaleOut)+n(counter.diverseOut);
+
       return {
         maleCurrent,
         femaleCurrent,
@@ -234,32 +642,40 @@
     }
 
     function cleanCounter(data){
-      const s = data || DEFAULT_COUNTER;
-      const c = compute(s);
+      const raw = data || DEFAULT_COUNTER;
+      const c = compute(raw);
 
       return {
-        maleIn:n(s.maleIn),
-        maleOut:n(s.maleOut),
-        femaleIn:n(s.femaleIn),
-        femaleOut:n(s.femaleOut),
-        diverseIn:n(s.diverseIn),
-        diverseOut:n(s.diverseOut),
-        peak:Math.max(n(s.peak),c.totalCurrent),
-        peakMale:Math.max(n(s.peakMale),c.maleCurrent),
-        peakFemale:Math.max(n(s.peakFemale),c.femaleCurrent),
-        peakDiverse:Math.max(n(s.peakDiverse),c.diverseCurrent),
-        eventCount:n(s.eventCount),
-        updatedAt:s.updatedAt || Date.now(),
-        lastAction:s.lastAction || "–"
+        maleIn:n(raw.maleIn),
+        maleOut:n(raw.maleOut),
+        femaleIn:n(raw.femaleIn),
+        femaleOut:n(raw.femaleOut),
+        diverseIn:n(raw.diverseIn),
+        diverseOut:n(raw.diverseOut),
+
+        peak:Math.max(n(raw.peak),c.totalCurrent),
+        peakMale:Math.max(n(raw.peakMale),c.maleCurrent),
+        peakFemale:Math.max(n(raw.peakFemale),c.femaleCurrent),
+        peakDiverse:Math.max(n(raw.peakDiverse),c.diverseCurrent),
+
+        eventCount:n(raw.eventCount),
+        updatedAt:raw.updatedAt || Date.now(),
+        lastAction:raw.lastAction || "–"
       };
     }
 
-    function formatTime(v){
-      return v ? new Date(v).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"}) : "–";
+    function formatTime(value){
+      return value
+        ? new Date(value).toLocaleTimeString("de-DE",{
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+          })
+        : "–";
     }
 
-    function escapeHTML(v){
-      return String(v)
+    function escapeHTML(value){
+      return String(value)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
@@ -267,11 +683,11 @@
         .replaceAll("'","&#39;");
     }
 
-    function toast(msg){
-      els.toast.textContent = msg;
+    function toast(message){
+      els.toast.textContent = message;
       els.toast.classList.add("show");
-      clearTimeout(toast.t);
-      toast.t = setTimeout(()=>els.toast.classList.remove("show"),1500);
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(()=>els.toast.classList.remove("show"),1500);
     }
 
     function renderCounter(data){
@@ -282,13 +698,16 @@
       els.maleCurrent.textContent = c.maleCurrent;
       els.femaleCurrent.textContent = c.femaleCurrent;
       els.diverseCurrent.textContent = c.diverseCurrent;
+
       els.totalInValue.textContent = c.totalIn;
       els.totalOutValue.textContent = c.totalOut;
+
       els.peakValue.textContent = latestCounter.peak;
       els.peakMaleValue.textContent = latestCounter.peakMale;
       els.peakFemaleValue.textContent = latestCounter.peakFemale;
       els.peakDiverseValue.textContent = latestCounter.peakDiverse;
       els.eventCountValue.textContent = latestCounter.eventCount;
+
       els.updatedInfo.textContent = `Aktualisiert: ${formatTime(latestCounter.updatedAt)}`;
     }
 
@@ -300,6 +719,7 @@
 
     function renderFeed(items){
       els.activityFeed.innerHTML = "";
+
       if(!items.length){
         els.activityFeed.innerHTML = '<div class="feedItem"><b>Noch keine Aktion</b><time>–</time></div>';
         return;
@@ -314,24 +734,35 @@
     }
 
     async function addFeed(title){
-      await push(feedRef,{title,at:Date.now(),deviceId});
+      await push(feedRef,{
+        title,
+        at:Date.now(),
+        deviceId
+      });
     }
 
     async function addHistory(snapshot, action){
       const c = compute(snapshot);
+      const now = Date.now();
+
       await push(historyRef,{
-        at:Date.now(),
+        at:now,
+        timestamp:now,
         action,
+
         male:c.maleCurrent,
         female:c.femaleCurrent,
         diverse:c.diverseCurrent,
         total:c.totalCurrent,
+
         totalIn:c.totalIn,
         totalOut:c.totalOut,
+
         peak:n(snapshot.peak),
         peakMale:n(snapshot.peakMale),
         peakFemale:n(snapshot.peakFemale),
         peakDiverse:n(snapshot.peakDiverse),
+
         eventCount:n(snapshot.eventCount),
         deviceId
       });
@@ -342,27 +773,47 @@
       let blocked = false;
 
       try{
-        const result = await runTransaction(counterRef, current => {
+        const result = await runTransaction(counterRef,current=>{
           const s = cleanCounter(current || DEFAULT_COUNTER);
 
-          if(kind === "maleIn"){s.maleIn += 1; label = "Männlich rein";}
-          if(kind === "femaleIn"){s.femaleIn += 1; label = "Weiblich rein";}
-          if(kind === "diverseIn"){s.diverseIn += 1; label = "Divers rein";}
+          if(kind === "maleIn"){
+            s.maleIn += 1;
+            label = "Männlich rein";
+          }
+
+          if(kind === "femaleIn"){
+            s.femaleIn += 1;
+            label = "Weiblich rein";
+          }
+
+          if(kind === "diverseIn"){
+            s.diverseIn += 1;
+            label = "Divers rein";
+          }
 
           if(kind === "maleOut"){
-            if(s.maleOut >= s.maleIn){blocked = true; return s;}
+            if(s.maleOut >= s.maleIn){
+              blocked = true;
+              return s;
+            }
             s.maleOut += 1;
             label = "Männlich raus";
           }
 
           if(kind === "femaleOut"){
-            if(s.femaleOut >= s.femaleIn){blocked = true; return s;}
+            if(s.femaleOut >= s.femaleIn){
+              blocked = true;
+              return s;
+            }
             s.femaleOut += 1;
             label = "Weiblich raus";
           }
 
           if(kind === "diverseOut"){
-            if(s.diverseOut >= s.diverseIn){blocked = true; return s;}
+            if(s.diverseOut >= s.diverseIn){
+              blocked = true;
+              return s;
+            }
             s.diverseOut += 1;
             label = "Divers raus";
           }
@@ -370,10 +821,12 @@
           if(blocked) return s;
 
           const c = compute(s);
+
           s.peak = Math.max(n(s.peak),c.totalCurrent);
           s.peakMale = Math.max(n(s.peakMale),c.maleCurrent);
           s.peakFemale = Math.max(n(s.peakFemale),c.femaleCurrent);
           s.peakDiverse = Math.max(n(s.peakDiverse),c.diverseCurrent);
+
           s.eventCount = n(s.eventCount)+1;
           s.updatedAt = Date.now();
           s.lastAction = label;
@@ -386,28 +839,39 @@
           return;
         }
 
-        if(result.committed){
-          const snap = result.snapshot.val();
-          await addFeed(label);
-          await addHistory(snap,label);
-        }
-      }catch(e){
-        console.error(e);
+        const snap = result.snapshot.val();
+
+        await addFeed(label);
+        await addHistory(snap,label);
+
+      }catch(error){
+        console.error(error);
         toast("Firebase-Fehler");
       }
     }
 
     function backup(){
       const c = compute(latestCounter);
-      navigator.clipboard.writeText(
-        JSON.stringify({exportedAt:new Date().toISOString(),counter:{...latestCounter,...c}},null,2)
-      ).then(()=>toast("Backup kopiert")).catch(()=>toast("Backup nicht kopiert"));
+      const data = {
+        exportedAt:new Date().toISOString(),
+        counter:{
+          ...latestCounter,
+          ...c
+        }
+      };
+
+      navigator.clipboard.writeText(JSON.stringify(data,null,2))
+        .then(()=>toast("Backup kopiert"))
+        .catch(()=>toast("Backup nicht kopiert"));
     }
 
     async function fullscreen(){
       try{
-        if(document.fullscreenElement) await document.exitFullscreen();
-        else await document.documentElement.requestFullscreen();
+        if(document.fullscreenElement){
+          await document.exitFullscreen();
+        }else{
+          await document.documentElement.requestFullscreen();
+        }
       }catch{
         toast("Vollbild nicht verfügbar");
       }
@@ -419,22 +883,23 @@
     $("btnFemaleOut").onclick = ()=>change("femaleOut");
     $("btnDiverseIn").onclick = ()=>change("diverseIn");
     $("btnDiverseOut").onclick = ()=>change("diverseOut");
+
     $("refreshBtn").onclick = ()=>location.reload();
     $("backupBtn").onclick = backup;
     $("fullscreenBtn").onclick = fullscreen;
 
-    onValue(connectedRef, snap=>{
+    onValue(connectedRef,snap=>{
       online = snap.val() === true;
       renderStatus();
     });
 
-    onValue(counterRef, snap=>{
+    onValue(counterRef,snap=>{
       renderCounter(snap.exists() ? snap.val() : DEFAULT_COUNTER);
     });
 
-    onValue(query(feedRef, limitToLast(5)), snap=>{
+    onValue(query(feedRef,limitToLast(5)),snap=>{
       const items = [];
-      snap.forEach(c=>items.push(c.val()));
+      snap.forEach(child=>items.push(child.val()));
       items.sort((a,b)=>n(a.at)-n(b.at));
       renderFeed(items);
     });
